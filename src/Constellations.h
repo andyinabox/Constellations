@@ -11,6 +11,8 @@ class Constellations : public ofBaseApp{
 		void update();
 		void draw();
 
+		vector<ofVec2f> findStars(cv::Mat &src);
+
 		void keyPressed(int key);
 		void keyReleased(int key);
 		void mouseMoved(int x, int y );
@@ -22,7 +24,11 @@ class Constellations : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 
 		// this will be the image that we prep for feature tracking
-		ofImage prep;
+		ofImage smooth;
+		ofImage grey;
+
+		// store our stars
+		vector<ofVec2f> stars;
 
 		// a grabber for our camera
 		ofVideoGrabber cam;
@@ -33,5 +39,7 @@ class Constellations : public ofBaseApp{
 
 		// gui
 		ofxPanel gui;
+		ofxToggle useAutoThreshold;
+
 		
 };
