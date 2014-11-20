@@ -105,6 +105,8 @@ void Constellations::update(){
 		}
 
 		// add some auto thresholding
+		// should replace this with `cvAdaptiveThreshold`
+		// http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html#adaptivethreshold
 		if(useAutoThreshold) {
 			ofxCv::autothreshold(grayMat);
 		}
