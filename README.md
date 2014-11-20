@@ -13,11 +13,11 @@ Making stars from images.
 	                             .
 	         *          .   *
 
-This is a dev app to work through a component of a larger project I am working on. The goal is to use openFrameworks
-and openCV (or whatever other tools are helpful) to form
+This is a dev app to work through a component of a larger project I am working on. The goal is to use [openFrameworks](http://openframeworks.cc/)
+and [openCV](http://opencv.org/) (or whatever other tools are helpful) to form
 constellations from images.
 
-It is also essentially a second crack at [starryNight]().
+It is also essentially a second crack at [starryNight](https://github.com/andyinabox/starryNight).
 
 References
 ----------
