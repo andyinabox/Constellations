@@ -23,9 +23,11 @@ class Constellations : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
-		// this will be the image that we prep for feature tracking
+		// image after smoothing
 		ofImage smooth;
+		// image to set to grayscale and prep for feature detection
 		ofImage gray;
+		// image to apply coutnours to
 		ofImage contours;
 
 		// store our stars
