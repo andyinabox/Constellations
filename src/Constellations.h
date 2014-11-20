@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxCv.h"
 #include "ofxGui.h"
+#include "ofxTriangle.h"
 
 class Constellations : public ofBaseApp{
 
@@ -11,12 +12,13 @@ class Constellations : public ofBaseApp{
 		void update();
 		void draw();
 
-		vector<ofVec2f> findStars(
+		vector<ofPoint> findStars(
 			cv::Mat &src
 			, int maxStars
 			, double qualityLevel
 			, double minDistance
 			, int blockSize
+			, float resize
 		);
 
 		void keyPressed(int key);
@@ -29,6 +31,13 @@ class Constellations : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
+		// a grabber for our camera
+		ofVideoGrabber cam;
+
+		// size of our image
+		int camWidth;
+		int camHeight;
+
 		// image after smoothing
 		ofImage smooth;
 		// image to set to grayscale and prep for feature detection
@@ -37,14 +46,10 @@ class Constellations : public ofBaseApp{
 		ofImage contours;
 
 		// store our stars
-		vector<ofVec2f> stars;
+		vector<ofPoint> stars;
 
-		// a grabber for our camera
-		ofVideoGrabber cam;
-
-		// size of our image
-		int camWidth;
-		int camHeight;
+		// triangulator
+		ofxTriangle triangle;
 
 		// gui
 		ofxPanel gui;

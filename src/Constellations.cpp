@@ -57,7 +57,7 @@ void Constellations::setup(){
 	gui.add(blockSize.setup("Star block size", 3, 0, 10));
 
 	gui.add(constellationLinesLabel.setup("// CONNECT THE DOTS", ""));
-	gui.add(showConstellationLines.setup("Show constellations", false));
+	gui.add(showConstellationLines.setup("Show constellations", true));
 
 	gui.add(contoursLabel.setup("// CONTOURS", ""));
 	gui.add(showContours.setup("Show contours", false));
@@ -140,8 +140,16 @@ void Constellations::update(){
 				maxStars,
 				qualityLevel,
 				minDistance,
-				blockSize
+				blockSize,
+				2 // we are doubling the scale
 			);
+		}
+
+		// clear the decks
+		triangle.clear();
+
+		if(showConstellationLines) {
+			triangle.triangulate(stars);
 		}
 
 		//
@@ -223,9 +231,20 @@ void Constellations::draw(){
 						// star radius max/min
 						starRadius = (((maxStarRadius-minStarRadius)/stars.size())*i)+minStarRadius;
 						// we are drawing this at 2x scale
-						ofDrawCircle(stars[i]*2, starRadius);
+						ofDrawCircle(stars[i], starRadius);
 					}
 				}
+			}
+
+			//
+			// SHOW CONSTELLATION LINES
+			// 
+			
+			if(showConstellationLines) {
+				ofPushMatrix();
+					ofEnableBlendMode(OF_BLENDMODE_ADD);
+					triangle.draw(255, 255, 255);
+				ofPopMatrix();
 			}
 
 			//
@@ -249,15 +268,16 @@ void Constellations::draw(){
 }
 
 // use cv::goodFeaturesToTrack to return a vector of ofPoints
-vector<ofVec2f> Constellations::findStars(
+vector<ofPoint> Constellations::findStars(
 	cv::Mat &src,
 	int maxStars,
 	double qualityLevel,
 	double minDistance,
-	int blockSize
+	int blockSize,
+	float resize
 ) {
 	vector<cv::Point2f> cvCorners;
-	vector<ofVec2f> ofCorners;
+	vector<ofPoint> ofCorners;
 
 	// these should probably be passed via args
 	// double qualityLevel = 0.01;
@@ -294,7 +314,7 @@ vector<ofVec2f> Constellations::findStars(
 	for(int i = 0; i < cvCorners.size(); i++) {
 		// we are allowing for a range of star radius based on
 		// "strength" of corner
-		ofCorners.push_back(ofVec2f(cvCorners[i].x, cvCorners[i].y));
+		ofCorners.push_back(ofPoint(cvCorners[i].x, cvCorners[i].y)*resize);
 	}
 
 	// return corners as oF vectors

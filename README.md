@@ -47,6 +47,7 @@ Todo
  - [ ] Develop a more specific plan of attach for the "constellations"
  - [ ] Finish contour implementation
 	- [ ] Develop an effective way to rescale the contour drawing
+	- [ ] Import "Triangle" library
 	- [ ] Add some additional paramaters?
  - [ ] Add a GLSL layer for effects
 	- [ ] Star "twinkling" ?
