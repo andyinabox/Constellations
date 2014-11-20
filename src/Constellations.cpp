@@ -120,35 +120,35 @@ void Constellations::update(){
 		// 
 
 		if(showContours) {
- 		// 	// cv::Mat resizeMat = ofxCv::toCv(cam);
- 		// 	cv::Mat grayMat2 = cv::Mat(camWidth, camHeight, CV_8UC1);
- 		// 	// cv::Mat resizeMat = cv::Mat(camWidth*2, camHeight*2, CV_8UC1);
- 		// 	cv::Mat contoursMat = ofxCv::toCv(contours);	
-			// int halfw = 4;
-			// int smoothPasses = 2;
-			// float sigma1 = 0.68;
-			// float sigma2 = 6.0;
-			// float tau = 0.974;
-			// int black = -8;
-			// int thresh = 150;
+ 			// cv::Mat resizeMat = ofxCv::toCv(cam);
+ 			cv::Mat grayMat2 = cv::Mat(camWidth, camHeight, CV_8UC1);
+ 			// cv::Mat resizeMat = cv::Mat(camWidth*2, camHeight*2, CV_8UC1);
+ 			cv::Mat contoursMat = ofxCv::toCv(contours);	
+			int halfw = 4;
+			int smoothPasses = 2;
+			float sigma1 = 0.68;
+			float sigma2 = 6.0;
+			float tau = 0.974;
+			int black = -8;
+			int thresh = 150;
 
-			// // copy to grayscale image
-			// ofxCv::copyGray(camMat, grayMat2);
+			// copy to grayscale image
+			ofxCv::copyGray(camMat, grayMat2);
 
-			// // resize before we draw contour lines
-			// // ofxCv::resize(grayMat2, resizeMat);
+			// resize before we draw contour lines
+			// ofxCv::resize(grayMat2, resizeMat);
 
-			// // coherent line drawing
-			// ofxCv::CLD(grayMat2, contoursMat, halfw, smoothPasses, sigma1, sigma2, tau, black);
+			// coherent line drawing
+			ofxCv::CLD(grayMat2, contoursMat, halfw, smoothPasses, sigma1, sigma2, tau, black);
 			
-			// // invert line
-			// ofxCv::invert(contoursMat);
+			// invert line
+			ofxCv::invert(contoursMat);
 
-			// // threshold image
-			// ofxCv::threshold(contoursMat, thresh);
+			// threshold image
+			ofxCv::threshold(contoursMat, thresh);
 
-			// // thin the contours
-			// ofxCv::thin(contoursMat);
+			// thin the contours
+			ofxCv::thin(contoursMat);
 
 		}
 		
