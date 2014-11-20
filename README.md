@@ -44,11 +44,11 @@ Basic Procedure (work in progress)
 
 Todo
 ----
-[ ] Develop a more specific plan of attach for the "constellations"
-[ ] Finish contour implementation
-	[ ] Develop an effective way to rescale the contour drawing
-	[ ] Add some additional paramaters?
-[ ] Add a GLSL layer for effects
-	[ ] Star "twinkling" ?
-	[ ] Perhaps some color gradients
-[ ] Add "snapshot" functionality, which will take a single image and run all of the transformations on it.
+ - [ ] Develop a more specific plan of attach for the "constellations"
+ - [ ] Finish contour implementation
+	- [ ] Develop an effective way to rescale the contour drawing
+	- [ ] Add some additional paramaters?
+ - [ ] Add a GLSL layer for effects
+	- [ ] Star "twinkling" ?
+	- [ ] Perhaps some color gradients	
+ - [ ] Add "snapshot" functionality, which will take a single image and run all of the transformations on it.
