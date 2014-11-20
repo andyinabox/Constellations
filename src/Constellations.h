@@ -70,7 +70,8 @@ class Constellations : public ofBaseApp{
 
 		ofxLabel starsLabel;
 		ofxToggle showStars;
-		ofxFloatSlider starRadius;
+		ofxFloatSlider maxStarRadius;
+		ofxFloatSlider minStarRadius;
 		ofxIntSlider maxStars;
 		ofxFloatSlider qualityLevel;
 		ofxFloatSlider minDistance;

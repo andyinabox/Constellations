@@ -47,8 +47,9 @@ void Constellations::setup(){
 
 	gui.add(starsLabel.setup("// STARS", ""));
 	gui.add(showStars.setup("Show stars", true));
-	gui.add(starRadius.setup("Star radius", 1.0, 0.0, 10.0));
-	gui.add(maxStars.setup("Max stars", 20, 1, 100));
+	gui.add(maxStarRadius.setup("Max star radius", 2.0, 0.0, 10.0));
+	gui.add(minStarRadius.setup("Min star radius", 0.5, 0.0, 10.0));
+	gui.add(maxStars.setup("Max star count", 40, 1, 100));
 	// gui.add(maxStarSize.setup("max star size", 1.5, 0.0, 10.0));
 	// gui.add(minStarSize.setup("min star size", 0.5, 0.0, 10.0));
 	gui.add(qualityLevel.setup("Star quality level", 0.01, 0.0, 1.0));
@@ -212,8 +213,14 @@ void Constellations::draw(){
 			if(showStars) {
 				ofSetColor(255, 255, 255);
 
+				float starRadius;
+
 				if(stars.size() > 0) {
 					for(int i = 0; i< stars.size(); i++) {
+						// calculate radius based on star "quality" (order) and
+						// star radius max/min
+						starRadius = (((maxStarRadius-minStarRadius)/stars.size())*i)+minStarRadius;
+						// we are drawing this at 2x scale
 						ofDrawCircle(stars[i]*2, starRadius);
 					}
 				}
@@ -283,6 +290,8 @@ vector<ofVec2f> Constellations::findStars(
 
 	// convert cv vectors to of vectors
 	for(int i = 0; i < cvCorners.size(); i++) {
+		// we are allowing for a range of star radius based on
+		// "strength" of corner
 		ofCorners.push_back(ofVec2f(cvCorners[i].x, cvCorners[i].y));
 	}
 
