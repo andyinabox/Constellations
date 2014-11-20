@@ -57,7 +57,7 @@ void Constellations::setup(){
 	gui.add(blockSize.setup("Star block size", 3, 0, 10));
 
 	gui.add(constellationLinesLabel.setup("// CONNECT THE DOTS", ""));
-	gui.add(showConstellationLines.setup("Show constellations", true));
+	gui.add(showConstellationLines.setup("Show constellations", false));
 
 	gui.add(contoursLabel.setup("// CONTOURS", ""));
 	gui.add(showContours.setup("Show contours", false));
