@@ -11,7 +11,13 @@ class Constellations : public ofBaseApp{
 		void update();
 		void draw();
 
-		vector<ofVec2f> findStars(cv::Mat &src);
+		vector<ofVec2f> findStars(
+			cv::Mat &src
+			, int maxStars
+			, double qualityLevel
+			, double minDistance
+			, int blockSize
+		);
 
 		void keyPressed(int key);
 		void keyReleased(int key);
@@ -57,11 +63,18 @@ class Constellations : public ofBaseApp{
 		ofxToggle useAutoThreshold;
 
 		ofxToggle useDilate;
+		ofxIntSlider dilateIterations;
 		ofxToggle useErode;
+		ofxIntSlider erodeIterations;
+		ofxToggle dilateErodeInvert;
 
 		ofxLabel starsLabel;
 		ofxToggle showStars;
 		ofxFloatSlider starRadius;
+		ofxIntSlider maxStars;
+		ofxFloatSlider qualityLevel;
+		ofxFloatSlider minDistance;
+		ofxFloatSlider blockSize;
 
 		ofxLabel constellationLinesLabel;
 		ofxToggle showConstellationLines;
