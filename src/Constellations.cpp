@@ -16,13 +16,42 @@ void Constellations::setup(){
 	cam.initGrabber(camWidth,camHeight);
 	
 	ofxCv::imitate(smooth, cam);
-	grey.allocate(camWidth, camHeight, OF_IMAGE_GRAYSCALE);
+	gray.allocate(camWidth, camHeight, OF_IMAGE_GRAYSCALE);
+	// contours.allocate(camWidth*2, camHeight*2, OF_IMAGE_GRAYSCALE);
+	contours.allocate(camWidth, camHeight, OF_IMAGE_GRAYSCALE);
+
 
 	ofSetVerticalSync(true);
 
 	// setup gui
 	gui.setup();
-	gui.add(useAutoThreshold.setup("Auto threshold", true));
+	gui.add(prepLabel.setup("// IMAGE PREP", ""));
+
+	gui.add(useBilateralFilter.setup("Bilateral filter (blur)", true));
+	gui.add(bfDiameter.setup("Diameter", 10, 0, 20));
+	gui.add(bfSigmaColor.setup("Sigma Color", 140.0, 0.0, 300.0));
+	gui.add(bfSigmaSpace.setup("Sigma Space", 140.0, 0.0, 300.0));
+
+	gui.add(useNormalize.setup("Normalize", true));
+
+	gui.add(useManualThreshold.setup("Manual threshold", true));
+	gui.add(thresh.setup("Thresh top", 100.0, 0.0, 255.0));
+
+	gui.add(useAutoThreshold.setup("Auto threshold", false));
+
+	gui.add(useDilate.setup("Dilate", true));
+	gui.add(useErode.setup("Erode", true));
+
+	gui.add(starsLabel.setup("// STARS", ""));
+	gui.add(showStars.setup("Show stars", true));
+	gui.add(starRadius.setup("Star radius", 1.0, 0.0, 10.0));
+
+	gui.add(constellationLinesLabel.setup("// CONNECT THE DOTS", ""));
+	gui.add(showConstellationLines.setup("Show constellations", false));
+
+	gui.add(contoursLabel.setup("// CONTOURS", ""));
+	gui.add(showContours.setup("Show contours", false));
+
 }
 
 //--------------------------------------------------------------
@@ -31,52 +60,103 @@ void Constellations::update(){
 	if(cam.isFrameNew()) {
 
 		//
-		// prep the image
+		// IMAGE PREP
 		// 
 
-		// now lets create a mat from prep and grey images
+		// now lets create a mat from prep and gray images
 		cv::Mat camMat = ofxCv::toCv(cam);
  		cv::Mat	smoothMat = ofxCv::toCv(smooth);
- 		cv::Mat greyMat = ofxCv::toCv(grey);
+ 		cv::Mat grayMat = ofxCv::toCv(gray);
+
 
 		// using bilateral filter because it's supposed to be better
 		// for edge detection than other smoothing/blurring algorithms
 		// ("Learning OpenCv", Ch. 5)
-		cv::bilateralFilter(camMat, smoothMat, 5, 100, 100);
+		if(useBilateralFilter) {
+			cv::bilateralFilter(camMat, smoothMat, bfDiameter, bfSigmaColor, bfSigmaSpace);
+		} else {
+			ofxCv::copy(camMat, smoothMat);
+		}
 
-		// now let's switch to greyscale
+		// now let's switch to grayscale
 		// (maybe we should just do this before blur?)
-		ofxCv::convertColor(smoothMat, greyMat, CV_RGB2GRAY);
+		ofxCv::convertColor(smoothMat, grayMat, CV_RGB2GRAY);
 
 		// may want to add some manual high/low thresholding here
 
-		ofxCv::normalize(greyMat);
+		if(useNormalize) {
+			ofxCv::normalize(grayMat);
+		}
 
+		if(useManualThreshold) {
+			float threshValue = thresh;
+			ofxCv::threshold(grayMat, threshValue, true);
+			ofxCv::invert(grayMat);		
+		}
 
 		// add some auto thresholding
 		if(useAutoThreshold) {
-			ofxCv::autothreshold(greyMat);
+			ofxCv::autothreshold(grayMat);
 		}
 
-		ofxCv::dilate(greyMat, 2);
 
-		ofxCv::erode(greyMat, 2);
+		if(useDilate) {
+			ofxCv::dilate(grayMat, 2);
+		}
+
+		if(useErode) {
+			ofxCv::erode(grayMat, 2);
+		}
 
 		//
-		// corner detection
+		// CORNER DETECTION
 		//
-		stars = Constellations::findStars(greyMat);
+		if(showStars) {
+			stars = Constellations::findStars(grayMat);
+		}
 
-		cout << "found " << stars.size() << " stars!" << endl;
+		//
+		// CONTOURS
+		// 
 
-		// for(int i = 0; i< stars.size(); i++) {
-		// 	cout << "*" << i << ": " << stars[i].x << ", " << stars[i].y << endl;
-		// }
+		if(showContours) {
+ 		// 	// cv::Mat resizeMat = ofxCv::toCv(cam);
+ 		// 	cv::Mat grayMat2 = cv::Mat(camWidth, camHeight, CV_8UC1);
+ 		// 	// cv::Mat resizeMat = cv::Mat(camWidth*2, camHeight*2, CV_8UC1);
+ 		// 	cv::Mat contoursMat = ofxCv::toCv(contours);	
+			// int halfw = 4;
+			// int smoothPasses = 2;
+			// float sigma1 = 0.68;
+			// float sigma2 = 6.0;
+			// float tau = 0.974;
+			// int black = -8;
+			// int thresh = 150;
+
+			// // copy to grayscale image
+			// ofxCv::copyGray(camMat, grayMat2);
+
+			// // resize before we draw contour lines
+			// // ofxCv::resize(grayMat2, resizeMat);
+
+			// // coherent line drawing
+			// ofxCv::CLD(grayMat2, contoursMat, halfw, smoothPasses, sigma1, sigma2, tau, black);
+			
+			// // invert line
+			// ofxCv::invert(contoursMat);
+
+			// // threshold image
+			// ofxCv::threshold(contoursMat, thresh);
+
+			// // thin the contours
+			// ofxCv::thin(contoursMat);
+
+		}
 		
 
 
 		smooth.update();
-		grey.update();
+		gray.update();
+		contours.update();
 	}
 }
 
@@ -91,7 +171,7 @@ void Constellations::draw(){
 
 		cam.draw(0,0);
 		// smooth.draw(camWidth, 0);
-		grey.draw(camWidth, 0);
+		gray.draw(camWidth, 0);
 
 		ofPushMatrix();
 
@@ -100,13 +180,29 @@ void Constellations::draw(){
 			ofSetColor(0, 0, 0);
 			ofDrawRectangle(0, 0, camWidth*2, camHeight*2);
 
-			ofSetColor(255, 255, 255);
-			float circleRadius = 1;
+			//
+			// SHOW STARS
+			// 
+			if(showStars) {
+				ofSetColor(255, 255, 255);
 
-			if(stars.size() > 0) {
-				for(int i = 0; i< stars.size(); i++) {
-					ofDrawCircle(stars[i]*2, circleRadius);
+				if(stars.size() > 0) {
+					for(int i = 0; i< stars.size(); i++) {
+						ofDrawCircle(stars[i]*2, starRadius);
+					}
 				}
+			}
+
+			//
+			// SHOW CONTOURS
+			//
+			if(showContours) {
+				// enable additive blending
+				ofEnableBlendMode(OF_BLENDMODE_ADD);
+				// draw the countours image on top of the stars
+				contours.draw(0, 0);
+				// reset to alpha blending
+				ofEnableBlendMode(OF_BLENDMODE_ALPHA);
 			}
 
 		ofPopMatrix();

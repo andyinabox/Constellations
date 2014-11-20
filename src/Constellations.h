@@ -25,7 +25,8 @@ class Constellations : public ofBaseApp{
 
 		// this will be the image that we prep for feature tracking
 		ofImage smooth;
-		ofImage grey;
+		ofImage gray;
+		ofImage contours;
 
 		// store our stars
 		vector<ofVec2f> stars;
@@ -39,7 +40,32 @@ class Constellations : public ofBaseApp{
 
 		// gui
 		ofxPanel gui;
+
+		ofxLabel prepLabel;
+
+		ofxToggle useBilateralFilter;
+		ofxIntSlider bfDiameter;
+		ofxFloatSlider bfSigmaColor;
+		ofxFloatSlider bfSigmaSpace;
+		ofxToggle useNormalize;
+
+		ofxToggle useManualThreshold;
+		ofxFloatSlider thresh;
+
 		ofxToggle useAutoThreshold;
+
+		ofxToggle useDilate;
+		ofxToggle useErode;
+
+		ofxLabel starsLabel;
+		ofxToggle showStars;
+		ofxFloatSlider starRadius;
+
+		ofxLabel constellationLinesLabel;
+		ofxToggle showConstellationLines;
+
+		ofxLabel contoursLabel;
+		ofxToggle showContours;
 
 		
 };
