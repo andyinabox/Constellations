@@ -37,6 +37,7 @@ class Constellations : public ofBaseApp{
 		// size of our image
 		int camWidth;
 		int camHeight;
+		int guiWidth;
 
 		// image after smoothing
 		ofImage smooth;
@@ -45,6 +46,12 @@ class Constellations : public ofBaseApp{
 		// image to apply coutnours to
 		ofImage contours;
 
+		// canvas for final image
+		ofRectangle canvas;
+
+		// this will be the placeable "central" star
+		ofPoint northStar;
+ 
 		// store our stars
 		vector<ofPoint> stars;
 

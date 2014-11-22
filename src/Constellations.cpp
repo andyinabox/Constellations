@@ -9,6 +9,7 @@ void Constellations::setup(){
 	// set the camer height / width
 	camWidth = 320;
 	camHeight = 240;
+	guiWidth = 200;
 
 	// set our framerate
 	cam.setDesiredFrameRate(10);
@@ -20,8 +21,12 @@ void Constellations::setup(){
 	// contours.allocate(camWidth*2, camHeight*2, OF_IMAGE_GRAYSCALE);
 	contours.allocate(camWidth, camHeight, OF_IMAGE_GRAYSCALE);
 
-
 	ofSetVerticalSync(true);
+
+	// by default, set the north star to be in the center
+	// since we're doubling canvas width/height in the 
+	// final version, this should put the star in the center
+	northStar = ofPoint(camWidth, camHeight);
 
 	// setup gui
 	gui.setup();
@@ -143,6 +148,7 @@ void Constellations::update(){
 				blockSize,
 				2 // we are doubling the scale
 			);
+			stars.push_back(northStar);
 		}
 
 		// clear the decks
@@ -204,7 +210,7 @@ void Constellations::draw(){
 	ofPushMatrix();
 
 		// move everything to the right of gui
-		ofTranslate(200, 0);
+		ofTranslate(guiWidth, 0);
 
 		cam.draw(0,0);
 		// smooth.draw(camWidth, 0);
@@ -215,7 +221,9 @@ void Constellations::draw(){
 			ofTranslate(0, camHeight);
 
 			ofSetColor(0, 0, 0);
-			ofDrawRectangle(0, 0, camWidth*2, camHeight*2);
+
+			// draw rectangle
+			canvas = ofRectangle(0, 0, camWidth*2, camHeight*2);
 
 			//
 			// SHOW STARS
@@ -338,7 +346,14 @@ void Constellations::mouseMoved(int x, int y ){
 
 //--------------------------------------------------------------
 void Constellations::mouseDragged(int x, int y, int button){
+	int transX = x-guiWidth;
+	int transY = y-camHeight;
 
+	cout << "mouseDragged: " << x << ", " << y << ", " << button << endl;
+	if(canvas.inside(transX, transY)) {
+		northStar.x = transX;
+		northStar.y = transY;
+	}
 }
 
 //--------------------------------------------------------------
@@ -348,7 +363,6 @@ void Constellations::mousePressed(int x, int y, int button){
 
 //--------------------------------------------------------------
 void Constellations::mouseReleased(int x, int y, int button){
-
 }
 
 //--------------------------------------------------------------
