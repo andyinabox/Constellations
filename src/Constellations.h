@@ -67,10 +67,14 @@ class Constellations : public ofBaseApp{
 		ofxLabel prepLabel;
 
 		ofxToggle useBilateralFilter;
-		ofxIntSlider bfDiameter;
-		ofxFloatSlider bfSigmaColor;
-		ofxFloatSlider bfSigmaSpace;
-		ofxToggle useNormalize;
+		// ofxIntSlider bfDiameter;
+		int bfDiameter;
+		// ofxFloatSlider bfSigmaColor;
+		float bfSigmaColor;
+		// ofxFloatSlider bfSigmaSpace;
+		float bfSigmaSpace;
+		// ofxToggle useNormalize;
+		bool useNormalize;
 
 		ofxToggle useManualThreshold;
 		ofxFloatSlider thresh;
@@ -98,5 +102,7 @@ class Constellations : public ofBaseApp{
 		ofxLabel contoursLabel;
 		ofxToggle showContours;
 
+		ofxLabel sequenceLabel;
+		ofxToggle sequenceMode;
 		
 };

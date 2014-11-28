@@ -42,11 +42,15 @@ void Constellations::setup(){
 	gui.add(prepLabel.setup("// IMAGE PREP", ""));
 
 	gui.add(useBilateralFilter.setup("Bilateral filter (blur)", true));
-	gui.add(bfDiameter.setup("Diameter", 10, 0, 20));
-	gui.add(bfSigmaColor.setup("Sigma Color", 140.0, 0.0, 300.0));
-	gui.add(bfSigmaSpace.setup("Sigma Space", 140.0, 0.0, 300.0));
+	// gui.add(bfDiameter.setup("Diameter", 10, 0, 20));
+	bfDiameter = 10;
+	// gui.add(bfSigmaColor.setup("Sigma Color", 140.0, 0.0, 300.0));
+	bfSigmaColor = 140.0;
+	// gui.add(bfSigmaSpace.setup("Sigma Space", 140.0, 0.0, 300.0));
+	bfSigmaSpace = 140.0;
 
-	gui.add(useNormalize.setup("Normalize", true));
+	// gui.add(useNormalize.setup("Normalize", true));
+	useNormalize = true;
 
 	gui.add(useManualThreshold.setup("Manual threshold", true));
 	gui.add(thresh.setup("Thresh top", 100.0, 0.0, 255.0));
@@ -76,12 +80,15 @@ void Constellations::setup(){
 	gui.add(contoursLabel.setup("// CONTOURS", ""));
 	gui.add(showContours.setup("Show contours", false));
 
+	gui.add(sequenceLabel.setup("// SEQUENCE", ""));
+	gui.add(sequenceMode.setup("Sequence mode", false));
+
 }
 
 //--------------------------------------------------------------
 void Constellations::update(){
 	cam.update();
-	if(cam.isFrameNew()) {
+	if(cam.isFrameNew() && !sequenceMode) {
 		ofPixels pix = cam.getPixels();
 		pix.resize(procWidth, procHeight);
 		base.setFromPixels(pix);
@@ -224,6 +231,7 @@ void Constellations::draw(){
 		ofTranslate(guiWidth, 0);
 
 		base.draw(0,0);
+
 		// smooth.draw(camWidth, 0);
 		gray.draw(procWidth, 0);
 
@@ -232,50 +240,57 @@ void Constellations::draw(){
 			ofTranslate(0, procHeight);
 
 			ofSetColor(0, 0, 0);
-
 			// draw rectangle
 			canvas = ofRectangle(0, 0, camWidth, camHeight);
+			ofSetColor(255, 255, 255);
 
-			//
-			// SHOW STARS
-			// 
-			if(showStars) {
-				ofSetColor(255, 255, 255);
 
-				float starRadius;
 
-				if(stars.size() > 0) {
-					for(int i = 0; i< stars.size(); i++) {
-						// calculate radius based on star "quality" (order) and
-						// star radius max/min
-						starRadius = (((maxStarRadius-minStarRadius)/stars.size())*i)+minStarRadius;
-						// we are drawing this at 2x scale
-						ofDrawCircle(stars[i], starRadius);
+			if(!sequenceMode) {
+
+				//
+				// SHOW STARS
+				// 
+				if(showStars) {
+					ofSetColor(255, 255, 255);
+
+					float starRadius;
+
+					if(stars.size() > 0) {
+						for(int i = 0; i< stars.size(); i++) {
+							// calculate radius based on star "quality" (order) and
+							// star radius max/min
+							starRadius = (((maxStarRadius-minStarRadius)/stars.size())*i)+minStarRadius;
+							// we are drawing this at 2x scale
+							ofDrawCircle(stars[i], starRadius);
+						}
 					}
 				}
-			}
 
-			//
-			// SHOW CONSTELLATION LINES
-			// 
-			
-			if(showConstellationLines) {
-				ofPushMatrix();
+				//
+				// SHOW CONSTELLATION LINES
+				// 
+				
+				if(showConstellationLines) {
+					ofPushMatrix();
+						ofEnableBlendMode(OF_BLENDMODE_ADD);
+						triangle.draw(255, 255, 255);
+					ofPopMatrix();
+				}
+
+				//
+				// SHOW CONTOURS
+				//
+				if(showContours) {
+					// enable additive blending
 					ofEnableBlendMode(OF_BLENDMODE_ADD);
-					triangle.draw(255, 255, 255);
-				ofPopMatrix();
-			}
-
-			//
-			// SHOW CONTOURS
-			//
-			if(showContours) {
-				// enable additive blending
-				ofEnableBlendMode(OF_BLENDMODE_ADD);
-				// draw the countours image on top of the stars
-				contours.draw(0, 0);
-				// reset to alpha blending
-				ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+					// draw the countours image on top of the stars
+					contours.draw(0, 0);
+					// reset to alpha blending
+					ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+				}
+			} else {
+				cam.draw(0,0);
 			}
 
 		ofPopMatrix();
