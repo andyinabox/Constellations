@@ -52,10 +52,10 @@ void Constellations::setup(){
 	// gui.add(useNormalize.setup("Normalize", true));
 	useNormalize = true;
 
-	gui.add(useManualThreshold.setup("Manual threshold", true));
-	gui.add(thresh.setup("Thresh top", 100.0, 0.0, 255.0));
+	// gui.add(useManualThreshold.setup("Manual threshold", true));
+	gui.add(thresh.setup("Thresh level", 100.0, 0.0, 255.0));
 
-	gui.add(useAutoThreshold.setup("Auto threshold", false));
+	// gui.add(useAutoThreshold.setup("Auto threshold", false));
 
 	gui.add(useDilate.setup("Dilate", true));
 	gui.add(dilateIterations.setup("Dilate iterations", 1, 0, 10));	
@@ -121,18 +121,18 @@ void Constellations::update(){
 			ofxCv::normalize(grayMat);
 		}
 
-		if(useManualThreshold) {
+		// if(useManualThreshold) {
 			float threshValue = thresh;
 			ofxCv::threshold(grayMat, threshValue, true);
 			ofxCv::invert(grayMat);		
-		}
+		// }
 
 		// add some auto thresholding
 		// should replace this with `cvAdaptiveThreshold`
 		// http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html#adaptivethreshold
-		if(useAutoThreshold) {
-			ofxCv::autothreshold(grayMat);
-		}
+		// if(useAutoThreshold) {
+		// 	ofxCv::autothreshold(grayMat);
+		// }
 
 		// need to assign them explicitly, ofxCv doesn't
 		// always like ofxGui values
@@ -299,6 +299,12 @@ void Constellations::draw(){
 
 	gui.setPosition(0, 0);
 	gui.draw();
+
+	ofDrawBitmapStringHighlight(
+		ofToString(ofGetFrameRate())
+		, guiWidth + 5
+		, 15
+	);
 }
 
 // use cv::goodFeaturesToTrack to return a vector of ofPoints

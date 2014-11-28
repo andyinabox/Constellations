@@ -76,10 +76,10 @@ class Constellations : public ofBaseApp{
 		// ofxToggle useNormalize;
 		bool useNormalize;
 
-		ofxToggle useManualThreshold;
+		// ofxToggle useManualThreshold;
 		ofxFloatSlider thresh;
 
-		ofxToggle useAutoThreshold;
+		// ofxToggle useAutoThreshold;
 
 		ofxToggle useDilate;
 		ofxIntSlider dilateIterations;
