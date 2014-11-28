@@ -7,17 +7,26 @@
 void Constellations::setup(){
 
 	// set the camer height / width
-	camWidth = 320;
-	camHeight = 240;
+	camWidth = 640;
+	camHeight = 480;
+	procWidth = 320;
+	procHeight = 240;
+
 	guiWidth = 200;
+
 
 	// set our framerate
 	cam.setDesiredFrameRate(10);
 	// initalize the `ofVideoGrabber`
 	cam.initGrabber(camWidth,camHeight);
+
+	// how about cloning the camera pixes into another img,
+	// resizing it, and using that as the base for the transformations?
 	
-	ofxCv::imitate(smooth, cam);
-	gray.allocate(camWidth, camHeight, OF_IMAGE_GRAYSCALE);
+	base.allocate(procWidth, procHeight, OF_IMAGE_COLOR);
+	ofxCv::imitate(smooth, base);
+	// smooth.allocate(procWidth, procHeight, OF_IMAGE_COLOR)
+	gray.allocate(procWidth, procHeight, OF_IMAGE_GRAYSCALE);
 	// contours.allocate(camWidth*2, camHeight*2, OF_IMAGE_GRAYSCALE);
 	contours.allocate(camWidth, camHeight, OF_IMAGE_GRAYSCALE);
 
@@ -26,7 +35,7 @@ void Constellations::setup(){
 	// by default, set the north star to be in the center
 	// since we're doubling canvas width/height in the 
 	// final version, this should put the star in the center
-	northStar = ofPoint(camWidth, camHeight);
+	northStar = ofPoint(camWidth/2, camHeight/2);
 
 	// setup gui
 	gui.setup();
@@ -73,13 +82,15 @@ void Constellations::setup(){
 void Constellations::update(){
 	cam.update();
 	if(cam.isFrameNew()) {
-
+		ofPixels pix = cam.getPixels();
+		pix.resize(procWidth, procHeight);
+		base.setFromPixels(pix);
 		//
 		// IMAGE PREP
 		// 
 
 		// now lets create a mat from prep and gray images
-		cv::Mat camMat = ofxCv::toCv(cam);
+		cv::Mat baseMat = ofxCv::toCv(base);
  		cv::Mat	smoothMat = ofxCv::toCv(smooth);
  		cv::Mat grayMat = ofxCv::toCv(gray);
 
@@ -88,9 +99,9 @@ void Constellations::update(){
 		// for edge detection than other smoothing/blurring algorithms
 		// ("Learning OpenCv", Ch. 5)
 		if(useBilateralFilter) {
-			cv::bilateralFilter(camMat, smoothMat, bfDiameter, bfSigmaColor, bfSigmaSpace);
+			cv::bilateralFilter(baseMat, smoothMat, bfDiameter, bfSigmaColor, bfSigmaSpace);
 		} else {
-			ofxCv::copy(camMat, smoothMat);
+			ofxCv::copy(baseMat, smoothMat);
 		}
 
 		// now let's switch to grayscale
@@ -176,7 +187,7 @@ void Constellations::update(){
 			int thresh = 150;
 
 			// copy to grayscale image
-			ofxCv::copyGray(camMat, grayMat2);
+			ofxCv::copyGray(cam, grayMat2);
 
 			// resize before we draw contour lines
 			// ofxCv::resize(grayMat2, resizeMat);
@@ -196,7 +207,7 @@ void Constellations::update(){
 		}
 		
 
-
+		base.update();
 		smooth.update();
 		gray.update();
 		contours.update();
@@ -212,18 +223,18 @@ void Constellations::draw(){
 		// move everything to the right of gui
 		ofTranslate(guiWidth, 0);
 
-		cam.draw(0,0);
+		base.draw(0,0);
 		// smooth.draw(camWidth, 0);
-		gray.draw(camWidth, 0);
+		gray.draw(procWidth, 0);
 
 		ofPushMatrix();
 
-			ofTranslate(0, camHeight);
+			ofTranslate(0, procHeight);
 
 			ofSetColor(0, 0, 0);
 
 			// draw rectangle
-			canvas = ofRectangle(0, 0, camWidth*2, camHeight*2);
+			canvas = ofRectangle(0, 0, camWidth, camHeight);
 
 			//
 			// SHOW STARS

@@ -37,8 +37,11 @@ class Constellations : public ofBaseApp{
 		// size of our image
 		int camWidth;
 		int camHeight;
+		int procWidth;
+		int procHeight;
 		int guiWidth;
 
+		ofImage base;
 		// image after smoothing
 		ofImage smooth;
 		// image to set to grayscale and prep for feature detection
