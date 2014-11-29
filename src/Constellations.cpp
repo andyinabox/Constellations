@@ -16,7 +16,7 @@ void Constellations::setup(){
 
 
 	// set our framerate
-	cam.setDesiredFrameRate(10);
+	// cam.setDesiredFrameRate(10);
 	// initalize the `ofVideoGrabber`
 	cam.initGrabber(camWidth,camHeight);
 
@@ -300,11 +300,11 @@ void Constellations::draw(){
 	gui.setPosition(0, 0);
 	gui.draw();
 
-	ofDrawBitmapStringHighlight(
-		ofToString(ofGetFrameRate())
-		, guiWidth + 5
-		, 15
-	);
+	string hud = "";
+	hud += ofToString(ofGetFrameRate(), 2) + " fps";
+	hud += " / " + ofToString(ofGetElapsedTimef(), 1) + "sec";
+
+	ofDrawBitmapStringHighlight(hud, guiWidth + 5, 15);
 }
 
 // use cv::goodFeaturesToTrack to return a vector of ofPoints
@@ -379,7 +379,7 @@ void Constellations::mouseMoved(int x, int y ){
 //--------------------------------------------------------------
 void Constellations::mouseDragged(int x, int y, int button){
 	int transX = x-guiWidth;
-	int transY = y-camHeight;
+	int transY = y-procHeight;
 
 	cout << "mouseDragged: " << x << ", " << y << ", " << button << endl;
 	if(canvas.inside(transX, transY)) {
