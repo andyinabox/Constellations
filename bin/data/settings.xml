@@ -1,0 +1,27 @@
+<group>
+	<___IMAGE_PREP/>
+	<Bilateral_filter__blur_>1</Bilateral_filter__blur_>
+	<Diameter>10</Diameter>
+	<Sigma_Color>140</Sigma_Color>
+	<Sigma_Space>140</Sigma_Space>
+	<Normalize>1</Normalize>
+	<Manual_threshold>1</Manual_threshold>
+	<Thresh_top>71.4</Thresh_top>
+	<Auto_threshold>0</Auto_threshold>
+	<Dilate>1</Dilate>
+	<Dilate_iterations>2</Dilate_iterations>
+	<Erode>1</Erode>
+	<Erode_iterations>3</Erode_iterations>
+	<Invert_order>1</Invert_order>
+	<___STARS/>
+	<Show_stars>1</Show_stars>
+	<Star_radius>1</Star_radius>
+	<Max_stars>44</Max_stars>
+	<Star_quality_level>0.005</Star_quality_level>
+	<Star_min_distance>23</Star_min_distance>
+	<Star_block_size>2.15</Star_block_size>
+	<___CONNECT_THE_DOTS/>
+	<Show_constellations>0</Show_constellations>
+	<___CONTOURS/>
+	<Show_contours>0</Show_contours>
+</group>

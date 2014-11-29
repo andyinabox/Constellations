@@ -31,6 +31,11 @@ class Constellations : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
+		int configWindowWidth;
+		int configWindowHeight;
+		int sequenceWindowWidth;
+		int sequenceWindowHeight;
+
 		// a grabber for our camera
 		ofVideoGrabber cam;
 
@@ -104,5 +109,10 @@ class Constellations : public ofBaseApp{
 
 		ofxLabel sequenceLabel;
 		ofxToggle sequenceMode;
+
+		// shader stuff
+		ofShader shader;
+		int period;
+		int t;
 		
 };

@@ -6,6 +6,12 @@
 //--------------------------------------------------------------
 void Constellations::setup(){
 
+	configWindowWidth = 840;
+	configWindowHeight = 720;
+	sequenceWindowWidth = 640;
+	sequenceWindowHeight = 480;
+
+
 	// set the camer height / width
 	camWidth = 640;
 	camHeight = 480;
@@ -13,6 +19,8 @@ void Constellations::setup(){
 	procHeight = 240;
 
 	guiWidth = 200;
+
+
 
 
 	// set our framerate
@@ -83,11 +91,27 @@ void Constellations::setup(){
 	gui.add(sequenceLabel.setup("// SEQUENCE", ""));
 	gui.add(sequenceMode.setup("Sequence mode", false));
 
+	period = 10;
+
+	// setup to load the correct shaders
+	// based on GPU
+	#ifdef TARGET_OPENGLES
+		shader.load("shadersES2/shader");
+	#else
+		shader.load("shadersGL2/shader");
+	#endif
+
+
 }
 
 //--------------------------------------------------------------
 void Constellations::update(){
+	
 	cam.update();
+	t = ofGetElapsedTimef();
+
+
+
 	if(cam.isFrameNew() && !sequenceMode) {
 		ofPixels pix = cam.getPixels();
 		pix.resize(procWidth, procHeight);
@@ -218,93 +242,121 @@ void Constellations::update(){
 		smooth.update();
 		gray.update();
 		contours.update();
+	} else {
+		// when in sequence mode
 	}
 }
 
 //--------------------------------------------------------------
 void Constellations::draw(){
+ 
+ 	// resize window for sequence mode
+	if(sequenceMode && ofGetWidth() != sequenceWindowWidth) {
+		ofSetWindowShape(sequenceWindowWidth, sequenceWindowHeight);
+	// resize window for config mode
+	} else if (!sequenceMode && ofGetWidth() != configWindowWidth) {
+		ofSetWindowShape(configWindowWidth, configWindowHeight);
+	}
+
+
 	ofBackground(10, 10, 10);
 
-	ofPushMatrix();
+	if(sequenceMode) {
+		shader.begin();
+	    	
+	    	// set uniforms
+	    	shader.setUniform1f("time", t);
+	    	shader.setUniform1f("period", period);
+	    	shader.setUniform1i("active", true);
 
-		// move everything to the right of gui
-		ofTranslate(guiWidth, 0);
-
-		base.draw(0,0);
-
-		// smooth.draw(camWidth, 0);
-		gray.draw(procWidth, 0);
-
+	    	// draw our image plane
+	    	ofPushMatrix();	
+	    		cam.draw(0, 0);
+	    	ofPopMatrix();
+	    
+	    // end the shader
+	    shader.end();
+	} else {
 		ofPushMatrix();
 
-			ofTranslate(0, procHeight);
+			// move everything to the right of gui
+			ofTranslate(guiWidth, 0);
 
-			ofSetColor(0, 0, 0);
-			// draw rectangle
-			canvas = ofRectangle(0, 0, camWidth, camHeight);
-			ofSetColor(255, 255, 255);
+			base.draw(0,0);
+
+			// smooth.draw(camWidth, 0);
+			gray.draw(procWidth, 0);
+
+			ofPushMatrix();
+
+				ofTranslate(0, procHeight);
+
+				ofSetColor(0, 0, 0);
+				// draw rectangle
+				canvas = ofRectangle(0, 0, camWidth, camHeight);
+				ofSetColor(255, 255, 255);
 
 
 
-			if(!sequenceMode) {
+				if(!sequenceMode) {
 
-				//
-				// SHOW STARS
-				// 
-				if(showStars) {
-					ofSetColor(255, 255, 255);
+					//
+					// SHOW STARS
+					// 
+					if(showStars) {
+						ofSetColor(255, 255, 255);
 
-					float starRadius;
+						float starRadius;
 
-					if(stars.size() > 0) {
-						for(int i = 0; i< stars.size(); i++) {
-							// calculate radius based on star "quality" (order) and
-							// star radius max/min
-							starRadius = (((maxStarRadius-minStarRadius)/stars.size())*i)+minStarRadius;
-							// we are drawing this at 2x scale
-							ofDrawCircle(stars[i], starRadius);
+						if(stars.size() > 0) {
+							for(int i = 0; i< stars.size(); i++) {
+								// calculate radius based on star "quality" (order) and
+								// star radius max/min
+								starRadius = (((maxStarRadius-minStarRadius)/stars.size())*i)+minStarRadius;
+								// we are drawing this at 2x scale
+								ofDrawCircle(stars[i], starRadius);
+							}
 						}
+					}
+
+					//
+					// SHOW CONSTELLATION LINES
+					// 
+					
+					if(showConstellationLines) {
+						ofPushMatrix();
+							ofEnableBlendMode(OF_BLENDMODE_ADD);
+							triangle.draw(255, 255, 255);
+						ofPopMatrix();
+					}
+
+					//
+					// SHOW CONTOURS
+					//
+					if(showContours) {
+						// enable additive blending
+						ofEnableBlendMode(OF_BLENDMODE_ADD);
+						// draw the countours image on top of the stars
+						contours.draw(0, 0);
+						// reset to alpha blending
+						ofEnableBlendMode(OF_BLENDMODE_ALPHA);
 					}
 				}
 
-				//
-				// SHOW CONSTELLATION LINES
-				// 
-				
-				if(showConstellationLines) {
-					ofPushMatrix();
-						ofEnableBlendMode(OF_BLENDMODE_ADD);
-						triangle.draw(255, 255, 255);
-					ofPopMatrix();
-				}
-
-				//
-				// SHOW CONTOURS
-				//
-				if(showContours) {
-					// enable additive blending
-					ofEnableBlendMode(OF_BLENDMODE_ADD);
-					// draw the countours image on top of the stars
-					contours.draw(0, 0);
-					// reset to alpha blending
-					ofEnableBlendMode(OF_BLENDMODE_ALPHA);
-				}
-			} else {
-				cam.draw(0,0);
-			}
+			ofPopMatrix();
 
 		ofPopMatrix();
 
-	ofPopMatrix();
+		gui.setPosition(0, 0);
+		gui.draw();
 
-	gui.setPosition(0, 0);
-	gui.draw();
+		string hud = "";
+		hud += ofToString(ofGetFrameRate(), 2) + " fps";
+		hud += " / " + ofToString(t, 1) + "sec";
 
-	string hud = "";
-	hud += ofToString(ofGetFrameRate(), 2) + " fps";
-	hud += " / " + ofToString(ofGetElapsedTimef(), 1) + "sec";
+		ofDrawBitmapStringHighlight(hud, guiWidth + 5, 15);
 
-	ofDrawBitmapStringHighlight(hud, guiWidth + 5, 15);
+	}
 }
 
 // use cv::goodFeaturesToTrack to return a vector of ofPoints
@@ -363,7 +415,9 @@ vector<ofPoint> Constellations::findStars(
 
 //--------------------------------------------------------------
 void Constellations::keyPressed(int key){
-
+	if(key == 's') {
+		sequenceMode = !sequenceMode;
+	}
 }
 
 //--------------------------------------------------------------
