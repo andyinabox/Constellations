@@ -11,6 +11,7 @@ void Constellations::setup(){
 	sequenceWindowWidth = 640;
 	sequenceWindowHeight = 480;
 
+	isFullScreen = false;
 
 	// set the camer height / width
 	camWidth = 640;
@@ -31,10 +32,10 @@ void Constellations::setup(){
 	// how about cloning the camera pixes into another img,
 	// resizing it, and using that as the base for the transformations?
 	
-	base.allocate(procWidth, procHeight, OF_IMAGE_COLOR);
-	ofxCv::imitate(smooth, base);
+	// base.allocate(procWidth, procHeight, OF_IMAGE_GRAYSCALE);
+	// ofxCv::imitate(smooth, base);
 	// smooth.allocate(procWidth, procHeight, OF_IMAGE_COLOR)
-	gray.allocate(procWidth, procHeight, OF_IMAGE_GRAYSCALE);
+	// gray.allocate(procWidth, procHeight, OF_IMAGE_GRAYSCALE);
 	// contours.allocate(camWidth*2, camHeight*2, OF_IMAGE_GRAYSCALE);
 	contours.allocate(camWidth, camHeight, OF_IMAGE_GRAYSCALE);
 
@@ -49,7 +50,7 @@ void Constellations::setup(){
 	gui.setup();
 	gui.add(prepLabel.setup("// IMAGE PREP", ""));
 
-	gui.add(useBilateralFilter.setup("Bilateral filter (blur)", true));
+	gui.add(useBilateralFilter.setup("Smoothing", true));
 	// gui.add(bfDiameter.setup("Diameter", 10, 0, 20));
 	bfDiameter = 10;
 	// gui.add(bfSigmaColor.setup("Sigma Color", 140.0, 0.0, 300.0));
@@ -65,9 +66,9 @@ void Constellations::setup(){
 
 	// gui.add(useAutoThreshold.setup("Auto threshold", false));
 
-	gui.add(useDilate.setup("Dilate", true));
+	// gui.add(useDilate.setup("Dilate", true));
 	gui.add(dilateIterations.setup("Dilate iterations", 1, 0, 10));	
-	gui.add(useErode.setup("Erode", true));
+	// gui.add(useErode.setup("Erode", true));
 	gui.add(erodeIterations.setup("Erode iterations", 1, 0, 10));	
 	gui.add(dilateErodeInvert.setup("Invert order", false));
 
@@ -110,45 +111,58 @@ void Constellations::update(){
 	cam.update();
 	t = ofGetElapsedTimef();
 
-
+	// if(!cam.isFrameNew()) {
+	// 	cout << 'not a new frame' << endl;
+	// }
 
 	if(cam.isFrameNew() && !sequenceMode) {
-		ofPixels pix = cam.getPixels();
-		pix.resize(procWidth, procHeight);
-		base.setFromPixels(pix);
+		// ofPixels pix = cam.getPixels();
+		// pix.resize(procWidth, procHeight);
+		// base.setFromPixels(pix);
+
+		Constellations::createBaseImage(
+			cam
+			, base
+			, procWidth
+			, procHeight
+			, true
+		);
+
 		//
 		// IMAGE PREP
 		// 
 
 		// now lets create a mat from prep and gray images
-		cv::Mat baseMat = ofxCv::toCv(base);
- 		cv::Mat	smoothMat = ofxCv::toCv(smooth);
- 		cv::Mat grayMat = ofxCv::toCv(gray);
+		// cv::Mat baseMat = ofxCv::toCv(base);
+ 		// cv::Mat	smoothMat = ofxCv::toCv(smooth);
+ 		// cv::Mat grayMat = ofxCv::toCv(gray);
 
 
 		// using bilateral filter because it's supposed to be better
 		// for edge detection than other smoothing/blurring algorithms
 		// ("Learning OpenCv", Ch. 5)
-		if(useBilateralFilter) {
-			cv::bilateralFilter(baseMat, smoothMat, bfDiameter, bfSigmaColor, bfSigmaSpace);
-		} else {
-			ofxCv::copy(baseMat, smoothMat);
-		}
+		// if(useBilateralFilter) {
+		// 	// cv::bilateralFilter(baseMat, grayMat, bfDiameter, bfSigmaColor, bfSigmaSpace);
+		// 	Constellations::smoothImage(base, gray, bfDiameter, bfSigmaColor, bfSigmaSpace);
+		// } else {
+		// 	imitate(grayMat, baseMat);
+		// 	ofxCv::copy(baseMat, grayMat);
+		// }
 
 		// now let's switch to grayscale
 		// (maybe we should just do this before blur?)
-		ofxCv::convertColor(smoothMat, grayMat, CV_RGB2GRAY);
+		// ofxCv::convertColor(smoothMat, grayMat, CV_RGB2GRAY);
 
 		// may want to add some manual high/low thresholding here
 
-		if(useNormalize) {
-			ofxCv::normalize(grayMat);
-		}
+		// if(useNormalize) {
+		// 	ofxCv::normalize(grayMat);
+		// }
 
 		// if(useManualThreshold) {
-			float threshValue = thresh;
-			ofxCv::threshold(grayMat, threshValue, true);
-			ofxCv::invert(grayMat);		
+			// float threshValue = thresh;
+			// ofxCv::threshold(grayMat, threshValue, true);
+			// ofxCv::invert(grayMat);		
 		// }
 
 		// add some auto thresholding
@@ -160,30 +174,43 @@ void Constellations::update(){
 
 		// need to assign them explicitly, ofxCv doesn't
 		// always like ofxGui values
-		int dilateIterationsValue = dilateIterations;
-		int erodeIterationsValue = erodeIterations;
+		// int dilateIterationsValue = dilateIterations;
+		// int erodeIterationsValue = erodeIterations;
 
 		// dilate first if enabled and order IS NOT inverted
-		if(useDilate && !dilateErodeInvert) {
-			ofxCv::dilate(grayMat, dilateIterationsValue);
-		}
+		// if(useDilate && !dilateErodeInvert) {
+		// 	ofxCv::dilate(grayMat, dilateIterationsValue);
+		// }
 
 		// erode if enabled
-		if(useErode) {
-			ofxCv::erode(grayMat, erodeIterationsValue);
-		}
+		// if(useErode) {
+		// 	ofxCv::erode(grayMat, erodeIterationsValue);
+		// }
 
 		// dilate last if enabled and order IS inverted
-		if(useDilate && dilateErodeInvert) {
-			ofxCv::dilate(grayMat, dilateIterationsValue);
-		}
+		// if(useDilate && dilateErodeInvert) {
+		// 	ofxCv::dilate(grayMat, dilateIterationsValue);
+		// }
+
+		Constellations::prepImage(
+			base
+			, gray
+			, useBilateralFilter
+			, bfDiameter
+			, bfSigmaColor
+			, bfSigmaSpace
+			, thresh
+			, dilateIterations
+			, erodeIterations
+			, dilateErodeInvert
+		);
 
 		//
 		// CORNER DETECTION
 		//
 		if(showStars) {
-			stars = Constellations::findStars(
-				grayMat,
+			stars = Constellations::findPoints(
+				gray,
 				maxStars,
 				qualityLevel,
 				minDistance,
@@ -239,7 +266,7 @@ void Constellations::update(){
 		
 
 		base.update();
-		smooth.update();
+		// smooth.update();
 		gray.update();
 		contours.update();
 	} else {
@@ -251,10 +278,10 @@ void Constellations::update(){
 void Constellations::draw(){
  
  	// resize window for sequence mode
-	if(sequenceMode && ofGetWidth() != sequenceWindowWidth) {
+	if(!isFullScreen && sequenceMode && ofGetWidth() != sequenceWindowWidth) {
 		ofSetWindowShape(sequenceWindowWidth, sequenceWindowHeight);
 	// resize window for config mode
-	} else if (!sequenceMode && ofGetWidth() != configWindowWidth) {
+	} else if (!isFullScreen && !sequenceMode && ofGetWidth() != configWindowWidth) {
 		ofSetWindowShape(configWindowWidth, configWindowHeight);
 	}
 
@@ -359,18 +386,138 @@ void Constellations::draw(){
 	}
 }
 
+void Constellations::createBaseImage(
+	ofVideoGrabber &src
+	, ofImage &dst
+	, int destWidth
+	, int destHeight
+	, bool convertToGray
+) {
+	// ofImage out;
+	ofPixels pix = src.getPixels();
+
+	// only resize if necessary
+	if(
+		pix.getWidth() != destWidth
+		|| pix.getHeight() != destHeight
+	) {
+		pix.resize(destWidth, destHeight);
+	}
+
+	// convert to grayscale?
+	if(convertToGray) {
+		pix.setImageType(OF_IMAGE_GRAYSCALE);
+	}
+
+	dst.setFromPixels(pix);
+	// return out;
+}
+
+
+void Constellations::prepImage(
+	ofImage &src
+	, ofImage &dst
+	, bool smoothing
+	, int smoothDiameter
+	, float smoothSigmaColor
+	, float smoothSigmaSpace
+	, float threshAmount
+	, int dilateIterations
+	, int erodeIterations
+	, bool invertDilateErode
+) {
+	ofxCv::imitate(dst, src);
+	cv::Mat srcMat = ofxCv::toCv(src);
+	cv::Mat dstMat = ofxCv::toCv(dst);
+
+	// smooth the image
+	if (smoothing) {
+		cv::bilateralFilter(srcMat, dstMat, smoothDiameter, smoothSigmaColor, smoothSigmaSpace);
+	} else {
+		ofxCv::copy(srcMat, dstMat);
+	}
+	// normalize the resulting image
+	ofxCv::normalize(dstMat);
+
+	// thresholding
+	ofxCv::threshold(dstMat, threshAmount, true);
+	ofxCv::invert(dstMat);		
+
+	// dilate & erode
+	// can invert order for "opening" and "closing"
+	if(!invertDilateErode) {
+		ofxCv::dilate(dstMat, dilateIterations);
+		ofxCv::erode(dstMat, erodeIterations);
+	} else {
+		ofxCv::erode(dstMat, erodeIterations);
+		ofxCv::dilate(dstMat, dilateIterations);
+	}
+
+
+}
+
+void Constellations::findContours(
+	ofImage &src
+	, ofImage &dst
+	, int halfw
+	, int smoothPasses
+	, float sigma1
+	, float sigma2
+	, float tau
+	, int black
+	, int threshold
+) {
+	ofxCv::imitate(dst, src);
+	cv::Mat srcMat = ofxCv::toCv(src);
+	cv::Mat dstMat = ofxCv::toCv(dst);	
+
+	// coherent line drawing
+	ofxCv::CLD(srcMat, dstMat, halfw, smoothPasses, sigma1, sigma2, tau, black);
+	
+	// invert line
+	ofxCv::invert(dstMat);
+
+	// threshold image
+	ofxCv::threshold(dstMat, threshold);
+
+	// thin the contours
+	ofxCv::thin(dstMat);	
+}
+
+// void Constellations::smoothImage(
+// 	ofImage &src
+// 	, ofImage &dst
+// 	, int diameter
+// 	, float sigmaColor
+// 	, float sigmaSpace
+// ) {
+// 	// create output image
+// 	// ofImage out;
+// 	// allocate output image based on source
+// 	ofxCv::imitate(dst, src);
+// 	// get openCv-friendly cv::Mat of each img
+// 	cv::Mat srcMat = ofxCv::toCv(src);
+// 	cv::Mat dstMat = ofxCv::toCv(dst);
+
+// 	// run bilateral filter
+// 	cv::bilateralFilter(srcMat, dstMat, diameter, sigmaColor, sigmaSpace);
+
+// 	// return out;
+// }
+
+
 // use cv::goodFeaturesToTrack to return a vector of ofPoints
-vector<ofPoint> Constellations::findStars(
-	cv::Mat &src,
+vector<ofPoint> Constellations::findPoints(
+	ofImage &src,
 	int maxStars,
 	double qualityLevel,
 	double minDistance,
 	int blockSize,
 	float resize
 ) {
-	vector<cv::Point2f> cvCorners;
-	vector<ofPoint> ofCorners;
-
+	vector<cv::Point2f> corners;
+	vector<ofPoint> points;
+	cv::Mat srcMat = ofxCv::toCv(src);
 	// these should probably be passed via args
 	// double qualityLevel = 0.01;
 	// double minDistance = 10;
@@ -380,9 +527,9 @@ vector<ofPoint> Constellations::findStars(
 	// apply corner detection
 	// http://docs.opencv.org/modules/imgproc/doc/feature_detection.html?highlight=goodfeaturestotrack#cv2.goodFeaturesToTrack
 	cv::goodFeaturesToTrack(
-		src,
+		srcMat,
 		// corners – Output vector of detected corners.
-		cvCorners,
+		corners,
 		// maxCorners – Maximum number of corners to return. If there are more
 		// corners than are found, the strongest of them is returned.
 		maxStars,
@@ -403,20 +550,22 @@ vector<ofPoint> Constellations::findStars(
 	);
 
 	// convert cv vectors to of vectors
-	for(int i = 0; i < cvCorners.size(); i++) {
+	for(int i = 0; i < corners.size(); i++) {
 		// we are allowing for a range of star radius based on
 		// "strength" of corner
-		ofCorners.push_back(ofPoint(cvCorners[i].x, cvCorners[i].y)*resize);
+		points.push_back(ofPoint(corners[i].x, corners[i].y)*resize);
 	}
 
 	// return corners as oF vectors
-	return ofCorners;
+	return points;
 }
 
 //--------------------------------------------------------------
 void Constellations::keyPressed(int key){
-	if(key == 's') {
-		sequenceMode = !sequenceMode;
+
+	switch(key) {
+		case 's': sequenceMode = !sequenceMode; break;
+		case ' ': isFullScreen = !isFullScreen; ofToggleFullscreen(); break;
 	}
 }
 

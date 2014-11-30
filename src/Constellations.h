@@ -12,8 +12,49 @@ class Constellations : public ofBaseApp{
 		void update();
 		void draw();
 
-		vector<ofPoint> findStars(
-			cv::Mat &src
+		void createBaseImage(
+			ofVideoGrabber &src
+			, ofImage &dst
+			, int destWidth
+			, int destHeight
+			, bool convertToGray
+		);
+
+		// void smoothImage(
+		// 	ofImage &src
+		// 	, ofImage &dst
+		// 	, int diameter
+		// 	, float sigmaColor
+		// 	, float sigmaSpace
+		// );
+
+		void prepImage(
+			ofImage &src
+			, ofImage &dst
+			, bool smoothing
+			, int smoothDiameter
+			, float smoothSigmaColor
+			, float smoothSigmaSpace
+			, float threshAmount
+			, int dilateIterations
+			, int erodeIterations
+			, bool invertDilateErode
+		);
+
+		void findContours(
+			ofImage &src
+			, ofImage &dst
+			, int halfw
+			, int smoothPasses
+			, float sigma1
+			, float sigma2
+			, float tau
+			, int black
+			, int thresh
+		);
+
+		vector<ofPoint> findPoints(
+			ofImage &src
 			, int maxStars
 			, double qualityLevel
 			, double minDistance
@@ -36,6 +77,8 @@ class Constellations : public ofBaseApp{
 		int sequenceWindowWidth;
 		int sequenceWindowHeight;
 
+		bool isFullScreen;
+
 		// a grabber for our camera
 		ofVideoGrabber cam;
 
@@ -48,7 +91,7 @@ class Constellations : public ofBaseApp{
 
 		ofImage base;
 		// image after smoothing
-		ofImage smooth;
+		// ofImage smooth;
 		// image to set to grayscale and prep for feature detection
 		ofImage gray;
 		// image to apply coutnours to
@@ -86,9 +129,9 @@ class Constellations : public ofBaseApp{
 
 		// ofxToggle useAutoThreshold;
 
-		ofxToggle useDilate;
+		// ofxToggle useDilate;
 		ofxIntSlider dilateIterations;
-		ofxToggle useErode;
+		// ofxToggle useErode;
 		ofxIntSlider erodeIterations;
 		ofxToggle dilateErodeInvert;
 
