@@ -1,8 +1,5 @@
 #include "Constellations.h"
 
-// using namespace cv;
-// using namespace ofxCv;
-
 //--------------------------------------------------------------
 void Constellations::setup(){
 
@@ -26,6 +23,7 @@ void Constellations::setup(){
 
 	// shader vars
 	period = 10;
+	Constellations::resetSequenceTime();
 
 	// setup to load the correct shaders
 	// based on GPU
@@ -98,7 +96,7 @@ void Constellations::setup(){
 void Constellations::update(){
 	
 	cam.update();
-	t = ofGetElapsedTimef();
+	start_t = ofGetElapsedTimef();
 
 
 	if(cam.isFrameNew() && !sequenceMode) {
@@ -183,7 +181,7 @@ void Constellations::draw(){
 		shader.begin();
 	    	
 	    	// set uniforms
-	    	shader.setUniform1f("time", t);
+	    	shader.setUniform1f("time", Constellations::getSequenceTime());
 	    	shader.setUniform1f("period", period);
 	    	shader.setUniform1i("active", true);
 
@@ -270,6 +268,15 @@ void Constellations::draw(){
 		ofDrawBitmapStringHighlight(hud, guiWidth + 5, 15);
 
 	}
+}
+
+void Constellations::resetSequenceTime() {
+	start_t = ofGetElapsedTimef();
+	t = 0;
+}
+
+float Constellations::getSequenceTime() {
+	return ofGetElapsedTimef() - start_t;
 }
 
 /*
@@ -436,7 +443,8 @@ void Constellations::keyPressed(int key){
 
 	switch(key) {
 		case 's': sequenceMode = !sequenceMode; break;
-		case ' ': isFullScreen = !isFullScreen; ofToggleFullscreen(); break;
+		case ' ' : Constellations::resetSequenceTime(); break;
+		case 'f': isFullScreen = !isFullScreen; ofToggleFullscreen(); break;
 	}
 }
 

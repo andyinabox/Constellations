@@ -3,14 +3,16 @@
 #include "ofMain.h"
 #include "ofxCv.h"
 #include "ofxGui.h"
-// #include "ofxTriangle.h"
 
-class Constellations : public ofBaseApp{
+class Constellations : public ofBaseApp {
 
 	public:
 		void setup();
 		void update();
 		void draw();
+
+		void resetSequenceTime();
+		float getSequenceTime();
 
 		void createBaseImage(
 			ofVideoGrabber &src
@@ -102,7 +104,8 @@ class Constellations : public ofBaseApp{
 		// shader stuff
 		ofShader shader;
 		int period;
-		int t;
+		float start_t;
+		float t;
 
 		// gui stuff
 		ofxPanel gui;

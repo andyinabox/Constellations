@@ -2,4 +2,4 @@ ofxOpenCv
 ofxCv
 ofxGui
 ofxXmlSettings
-ofxTriangle
+
