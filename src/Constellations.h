@@ -3,7 +3,7 @@
 #include "ofMain.h"
 #include "ofxCv.h"
 #include "ofxGui.h"
-#include "ofxTriangle.h"
+// #include "ofxTriangle.h"
 
 class Constellations : public ofBaseApp{
 
@@ -20,14 +20,6 @@ class Constellations : public ofBaseApp{
 			, bool convertToGray
 		);
 
-		// void smoothImage(
-		// 	ofImage &src
-		// 	, ofImage &dst
-		// 	, int diameter
-		// 	, float sigmaColor
-		// 	, float sigmaSpace
-		// );
-
 		void prepImage(
 			ofImage &src
 			, ofImage &dst
@@ -42,7 +34,7 @@ class Constellations : public ofBaseApp{
 		);
 
 		void findContours(
-			ofImage &src
+			ofVideoGrabber &src
 			, ofImage &dst
 			, int halfw
 			, int smoothPasses
@@ -89,12 +81,13 @@ class Constellations : public ofBaseApp{
 		int procHeight;
 		int guiWidth;
 
+		// base image for processing
 		ofImage base;
-		// image after smoothing
-		// ofImage smooth;
-		// image to set to grayscale and prep for feature detection
+
+		// processed greyscale image
 		ofImage gray;
-		// image to apply coutnours to
+
+		// image for find contours
 		ofImage contours;
 
 		// canvas for final image
@@ -106,14 +99,16 @@ class Constellations : public ofBaseApp{
 		// store our stars
 		vector<ofPoint> stars;
 
-		// triangulator
-		ofxTriangle triangle;
+		// shader stuff
+		ofShader shader;
+		int period;
+		int t;
 
-		// gui
+		// gui stuff
 		ofxPanel gui;
-
 		ofxLabel prepLabel;
 
+		// image prep
 		ofxToggle useBilateralFilter;
 		// ofxIntSlider bfDiameter;
 		int bfDiameter;
@@ -123,18 +118,16 @@ class Constellations : public ofBaseApp{
 		float bfSigmaSpace;
 		// ofxToggle useNormalize;
 		bool useNormalize;
-
 		// ofxToggle useManualThreshold;
 		ofxFloatSlider thresh;
-
 		// ofxToggle useAutoThreshold;
-
 		// ofxToggle useDilate;
 		ofxIntSlider dilateIterations;
 		// ofxToggle useErode;
 		ofxIntSlider erodeIterations;
 		ofxToggle dilateErodeInvert;
 
+		// stars
 		ofxLabel starsLabel;
 		ofxToggle showStars;
 		ofxFloatSlider maxStarRadius;
@@ -144,18 +137,11 @@ class Constellations : public ofBaseApp{
 		ofxFloatSlider minDistance;
 		ofxFloatSlider blockSize;
 
-		ofxLabel constellationLinesLabel;
-		ofxToggle showConstellationLines;
-
+		// contours
 		ofxLabel contoursLabel;
 		ofxToggle showContours;
 
+		// sequence mode
 		ofxLabel sequenceLabel;
-		ofxToggle sequenceMode;
-
-		// shader stuff
-		ofShader shader;
-		int period;
-		int t;
-		
+		ofxToggle sequenceMode;		
 };
