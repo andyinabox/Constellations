@@ -25,13 +25,9 @@ void Constellations::setup(){
 	period = 10;
 	Constellations::resetSequenceTime();
 
-	// setup to load the correct shaders
-	// based on GPU
-	#ifdef TARGET_OPENGLES
-		shader.load("shadersES2/shader");
-	#else
-		shader.load("shadersGL2/shader");
-	#endif
+	// just targeting opengl for now
+	shader.load("shadersGL2/shader");
+	vignette.load("shadersGL2/vignette");
 
 	// set our framerate and initialize video grabber
 	cam.setDesiredFrameRate(30);
@@ -178,20 +174,35 @@ void Constellations::draw(){
 	ofBackground(10, 10, 10);
 
 	if(sequenceMode) {
-		shader.begin();
+		// shader.begin();
+	    	
+	 //    	// set uniforms
+	 //    	shader.setUniform1f("time", Constellations::getSequenceTime());
+	 //    	shader.setUniform1f("period", period);
+	 //    	shader.setUniform1i("active", true);
+
+	 //    	// draw our image plane
+	 //    	ofPushMatrix();	
+	 //    		cam.draw(0, 0);
+	 //    	ofPopMatrix();
+	    
+	 //    // end the shader
+	 //    shader.end();
+
+		vignette.begin();
 	    	
 	    	// set uniforms
-	    	shader.setUniform1f("time", Constellations::getSequenceTime());
-	    	shader.setUniform1f("period", period);
-	    	shader.setUniform1i("active", true);
+	    	vignette.setUniform1f("radius", 0.5);
+	    	vignette.setUniform1f("softness", 0.45);
+	    	vignette.setUniform1f("opacity", 1.0);
+	    	vignette.setUniform2f("resolution", ofGetWidth(), ofGetHeight());
 
 	    	// draw our image plane
-	    	ofPushMatrix();	
-	    		cam.draw(0, 0);
-	    	ofPopMatrix();
+	    	cam.draw(0, 0);
 	    
 	    // end the shader
-	    shader.end();
+	    vignette.end();
+
 	} else {
 		ofPushMatrix();
 

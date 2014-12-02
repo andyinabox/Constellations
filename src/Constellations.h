@@ -103,6 +103,7 @@ class Constellations : public ofBaseApp {
 
 		// shader stuff
 		ofShader shader;
+		ofShader vignette;
 		int period;
 		float start_t;
 		float t;
