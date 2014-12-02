@@ -96,7 +96,6 @@ void Constellations::setup(){
 void Constellations::update(){
 	
 	cam.update();
-	start_t = ofGetElapsedTimef();
 
 
 	if(cam.isFrameNew() && !sequenceMode) {
@@ -160,6 +159,7 @@ void Constellations::update(){
 		contours.update();
 	} else {
 		// when in sequence mode
+
 	}
 }
 
