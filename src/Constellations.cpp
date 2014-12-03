@@ -171,6 +171,14 @@ void Constellations::draw(){
 	    // end the shader
 	    vignette.end();
 
+		ofEnableBlendMode(OF_BLENDMODE_ADD);
+		Constellations::drawStars(
+			ofColor(255, 255, 255)
+			, minStarRadius
+			, maxStarRadius
+		);
+		ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+
 	} else {
 		ofPushMatrix();
 
