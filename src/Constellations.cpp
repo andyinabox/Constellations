@@ -279,7 +279,8 @@ void Constellations::findStars() {
 		qualityLevel,
 		minDistance,
 		blockSize,
-		2 // we are doubling the scale
+		camWidth,
+		camHeight
 	);
 	stars.push_back(northStar);
 }
@@ -424,8 +425,13 @@ vector<ofPoint> Constellations::findPoints(
 	double qualityLevel,
 	double minDistance,
 	int blockSize,
-	float resize
+	int destWidth,
+	int destHeight
 ) {
+
+
+	float xScale = destWidth/src.getWidth();
+	float yScale = destHeight/src.getHeight();
 	vector<cv::Point2f> corners;
 	vector<ofPoint> points;
 	cv::Mat srcMat = ofxCv::toCv(src);
@@ -455,11 +461,12 @@ vector<ofPoint> Constellations::findPoints(
 		// don't use harris detector
 	);
 
+
 	// convert cv vectors to of vectors
 	for(int i = 0; i < corners.size(); i++) {
 		// we are allowing for a range of star radius based on
 		// "strength" of corner
-		points.push_back(ofPoint(corners[i].x, corners[i].y)*resize);
+		points.push_back(ofPoint(corners[i].x*xScale, corners[i].y*yScale));
 	}
 
 	// return corners as oF vectors

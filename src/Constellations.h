@@ -59,7 +59,8 @@ class Constellations : public ofBaseApp {
 			, double qualityLevel
 			, double minDistance
 			, int blockSize
-			, float resize
+			, int destWidth
+			, int destHEight
 		);
 
 		void keyPressed(int key);
