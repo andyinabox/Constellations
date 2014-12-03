@@ -85,7 +85,7 @@ void Constellations::setup(){
 
 	// sequence mode
 	gui.add(sequenceLabel.setup("// SEQUENCE", ""));
-	gui.add(sequenceMode.setup("Sequence mode", false));
+	gui.add(sequenceMode.setup("Sequence mode", true));
 }
 
 //--------------------------------------------------------------
@@ -97,41 +97,9 @@ void Constellations::update(){
 	if(cam.isFrameNew() && !sequenceMode) {
 
 		// create base image
-		Constellations::createBaseImage(
-			cam
-			, base
-			, procWidth
-			, procHeight
-			, true
-		);
-
-		// prep image for corner detection
-		Constellations::prepImage(
-			base
-			, gray
-			, useBilateralFilter
-			, bfDiameter
-			, bfSigmaColor
-			, bfSigmaSpace
-			, thresh
-			, dilateIterations
-			, erodeIterations
-			, dilateErodeInvert
-		);
+		Constellations::findStars();
 
 
-		// if enabled, find points using corner detection
-		if(showStars) {
-			stars = Constellations::findPoints(
-				gray,
-				maxStars,
-				qualityLevel,
-				minDistance,
-				blockSize,
-				2 // we are doubling the scale
-			);
-			stars.push_back(northStar);
-		}
 
 		// if enabled, find contours
 		if(showContours) {
@@ -192,11 +160,11 @@ void Constellations::draw(){
 		vignette.begin();
 	    	
 	    	// set uniforms
-	    	vignette.setUniform1f("radius", 0.5);
-	    	vignette.setUniform1f("softness", 0.45);
+	    	vignette.setUniform1f("radius", ofMap(mouseX, 0, ofGetWidth(), 0, 1));
+	    	vignette.setUniform1f("softness", 1);
 	    	vignette.setUniform1f("opacity", 1.0);
 	    	vignette.setUniform2f("resolution", ofGetWidth(), ofGetHeight());
-
+	    	vignette.setUniform1f("time", ofMap(mouseY, 0, ofGetHeight(), 0, 1));
 	    	// draw our image plane
 	    	cam.draw(0, 0);
 	    
@@ -231,19 +199,7 @@ void Constellations::draw(){
 					// SHOW STARS
 					// 
 					if(showStars) {
-						ofSetColor(255, 255, 255);
-
-						float starRadius;
-
-						if(stars.size() > 0) {
-							for(int i = 0; i< stars.size(); i++) {
-								// calculate radius based on star "quality" (order) and
-								// star radius max/min
-								starRadius = (((maxStarRadius-minStarRadius)/stars.size())*i)+minStarRadius;
-								// we are drawing this at 2x scale
-								ofDrawCircle(stars[i], starRadius);
-							}
-						}
+						Constellations::drawStars(ofColor(255,255,255), minStarRadius, maxStarRadius);
 					}
 
 					//
@@ -281,6 +237,8 @@ void Constellations::draw(){
 	}
 }
 
+
+
 void Constellations::resetSequenceTime() {
 	start_t = ofGetElapsedTimef();
 	t = 0;
@@ -288,6 +246,65 @@ void Constellations::resetSequenceTime() {
 
 float Constellations::getSequenceTime() {
 	return ofGetElapsedTimef() - start_t;
+}
+
+void Constellations::findStars() {
+	// create base image
+	Constellations::createBaseImage(
+		cam
+		, base
+		, procWidth
+		, procHeight
+		, true
+	);	
+
+	// prep image for corner detection
+	Constellations::prepImage(
+		base
+		, gray
+		, useBilateralFilter
+		, bfDiameter
+		, bfSigmaColor
+		, bfSigmaSpace
+		, thresh
+		, dilateIterations
+		, erodeIterations
+		, dilateErodeInvert
+	);
+
+
+	stars = Constellations::findPoints(
+		gray,
+		maxStars,
+		qualityLevel,
+		minDistance,
+		blockSize,
+		2 // we are doubling the scale
+	);
+	stars.push_back(northStar);
+}
+
+void Constellations::drawStars(
+	ofColor color
+	, float minRadius
+	, float maxRadius
+) {
+	
+	ofPushMatrix();
+		ofSetColor(color);
+
+		float starRadius;
+
+		if(stars.size() > 0) {
+			for(int i = 0; i< stars.size(); i++) {
+				// calculate radius based on star "quality" (order) and
+				// star radius max/min
+				starRadius = (((maxRadius-minRadius)/stars.size())*i)+minRadius;
+				// we are drawing this at 2x scale
+				ofDrawCircle(stars[i], starRadius);
+			}
+		}
+	ofPopMatrix();
 }
 
 /*
@@ -449,12 +466,17 @@ vector<ofPoint> Constellations::findPoints(
 	return points;
 }
 
+
+
 //--------------------------------------------------------------
 void Constellations::keyPressed(int key){
 
 	switch(key) {
 		case 's': sequenceMode = !sequenceMode; break;
-		case ' ' : Constellations::resetSequenceTime(); break;
+		case ' ' :
+			Constellations::findStars();
+			Constellations::resetSequenceTime();
+			break;
 		case 'f': isFullScreen = !isFullScreen; ofToggleFullscreen(); break;
 	}
 }

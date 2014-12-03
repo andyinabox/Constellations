@@ -13,6 +13,12 @@ class Constellations : public ofBaseApp {
 
 		void resetSequenceTime();
 		float getSequenceTime();
+		void findStars();
+		void drawStars(
+			ofColor color
+			, float minRadius
+			, float maxRadius
+		);
 
 		void createBaseImage(
 			ofVideoGrabber &src

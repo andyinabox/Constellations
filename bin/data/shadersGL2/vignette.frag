@@ -7,6 +7,7 @@ uniform vec2 resolution;
 uniform float radius;
 uniform float softness;
 uniform float opacity;
+uniform float time;
 
 // https://github.com/mattdesl/lwjgl-basics/wiki/ShaderLesson3
 void main()
@@ -22,7 +23,9 @@ void main()
 	//use smoothstep to create a smooth vignette
     float vignette = smoothstep(radius, radius - softness, len);
 
+    // color.rgb = mix(color.rgb, color.rgb * vignette, opacity);
     color.rgb = mix(color.rgb, color.rgb * vignette, opacity);
+
 
     gl_FragColor = color;
 }
