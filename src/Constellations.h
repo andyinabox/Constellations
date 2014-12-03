@@ -111,6 +111,8 @@ class Constellations : public ofBaseApp {
 		// shader stuff
 		ofShader shader;
 		ofShader vignette;
+		ofShader twinkle;
+		
 		int period;
 		float start_t;
 		float t;

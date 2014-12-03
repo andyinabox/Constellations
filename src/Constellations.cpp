@@ -28,6 +28,7 @@ void Constellations::setup(){
 	// just targeting opengl for now
 	shader.load("shadersGL2/shader");
 	vignette.load("shadersGL2/vignette");
+	twinkle.load("shadersGL2/twinkle");
 
 	// set our framerate and initialize video grabber
 	cam.setDesiredFrameRate(30);
@@ -172,12 +173,17 @@ void Constellations::draw(){
 	    vignette.end();
 
 		ofEnableBlendMode(OF_BLENDMODE_ADD);
-		Constellations::drawStars(
-			ofColor(255, 255, 255)
-			, minStarRadius
-			, maxStarRadius
-		);
+	    
+	    // twinkle.begin();
+			Constellations::drawStars(
+				ofColor(255, 255, 255)
+				, minStarRadius
+				, maxStarRadius
+			);
+		// twinkle.end();
+
 		ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+
 
 	} else {
 		ofPushMatrix();
