@@ -79,6 +79,7 @@ void Constellations::setup(){
 	gui.add(qualityLevel.setup("Star quality level", 0.01, 0.0, 1.0));
 	gui.add(minDistance.setup("Star min distance", 20.0, 0.0, 100.0));
 	gui.add(blockSize.setup("Star block size", 3, 0, 10));
+	gui.add(drawStarsAsPoints.setup("Draw points", false));
 
 	// contours
 	gui.add(contoursLabel.setup("// CONTOURS", ""));
@@ -161,6 +162,7 @@ void Constellations::draw(){
 		vignette.begin();
 	    	
 	    	// set uniforms
+	    	vignette.setUniform2f("center", ofMap(northStar.x, 0, ofGetWidth(), 0, 1), ofMap(northStar.y, 0, ofGetHeight(), 0, 1));
 	    	vignette.setUniform1f("radius", ofMap(mouseX, 0, ofGetWidth(), 0, 1));
 	    	vignette.setUniform1f("softness", 1);
 	    	vignette.setUniform1f("opacity", 1.0);
@@ -315,8 +317,15 @@ void Constellations::drawStars(
 				// calculate radius based on star "quality" (order) and
 				// star radius max/min
 				starRadius = (((maxRadius-minRadius)/stars.size())*i)+minRadius;
-				// we are drawing this at 2x scale
-				ofDrawCircle(stars[i], starRadius);
+
+				if(!drawStarsAsPoints) {
+					// we are drawing this at 2x scale
+					ofDrawCircle(stars[i], starRadius);
+				} else {
+					ofBeginShape();
+						ofVertex(stars[i].x, stars[i].y, ofMap(i, 0, stars.size(), 9, 1));
+					ofEndShape();
+				}
 			}
 		}
 	ofPopMatrix();

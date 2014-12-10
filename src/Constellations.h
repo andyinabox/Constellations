@@ -149,6 +149,7 @@ class Constellations : public ofBaseApp {
 		ofxFloatSlider qualityLevel;
 		ofxFloatSlider minDistance;
 		ofxFloatSlider blockSize;
+		ofxToggle drawStarsAsPoints;
 
 		// contours
 		ofxLabel contoursLabel;

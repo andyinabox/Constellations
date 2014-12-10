@@ -8,6 +8,7 @@ uniform float radius;
 uniform float softness;
 uniform float opacity;
 uniform float time;
+uniform vec2 center;
 
 // https://github.com/mattdesl/lwjgl-basics/wiki/ShaderLesson3
 void main()
@@ -15,7 +16,7 @@ void main()
     vec4 color = texture2DRect(tex0, texCoordVarying);
 
     // get center
-    vec2 position = (gl_FragCoord.xy / resolution.xy) - vec2(0.5);
+    vec2 position = (gl_FragCoord.xy / resolution.xy) - vec2(center.x, (1.0-center.y));//- vec2(0.5);
 
 	//determine the vector length of the center position
     float len = length(position);
