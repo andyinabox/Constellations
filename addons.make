@@ -2,4 +2,5 @@ ofxOpenCv
 ofxCv
 ofxGui
 ofxXmlSettings
+ofxAutoReloadedShader
 

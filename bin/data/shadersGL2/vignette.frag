@@ -15,8 +15,8 @@ void main()
 {
     vec4 color = texture2DRect(tex0, texCoordVarying);
 
-    // get center
-    vec2 position = (gl_FragCoord.xy / resolution.xy) - vec2(center.x, (1.0-center.y));//- vec2(0.5);
+    // get center of vignette based on given position
+    vec2 position = (gl_FragCoord.xy / resolution.xy) - center; //vec2(center.x, (1.0-center.y));//- vec2(0.5);
 
 	//determine the vector length of the center position
     float len = length(position);

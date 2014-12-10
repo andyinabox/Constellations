@@ -45,6 +45,10 @@ void Constellations::setup(){
 	// final version, this should put the star in the center
 	northStar = ofPoint(camWidth/2, camHeight/2);
 
+	mainFbo.allocate(camWidth, camHeight);
+	mainFbo.begin();
+		ofClear(0, 0, 0, 0);
+	mainFbo.end();
 	// setup gui
 	gui.setup();
 	gui.add(prepLabel.setup("// IMAGE PREP", ""));
@@ -159,20 +163,27 @@ void Constellations::draw(){
 	 //    // end the shader
 	 //    shader.end();
 
-		vignette.begin();
-	    	
-	    	// set uniforms
-	    	vignette.setUniform2f("center", ofMap(northStar.x, 0, ofGetWidth(), 0, 1), ofMap(northStar.y, 0, ofGetHeight(), 0, 1));
-	    	vignette.setUniform1f("radius", ofMap(mouseX, 0, ofGetWidth(), 0, 1));
-	    	vignette.setUniform1f("softness", 1);
-	    	vignette.setUniform1f("opacity", 1.0);
-	    	vignette.setUniform2f("resolution", ofGetWidth(), ofGetHeight());
-	    	vignette.setUniform1f("time", ofMap(mouseY, 0, ofGetHeight(), 0, 1));
-	    	// draw our image plane
-	    	cam.draw(0, 0);
-	    
-	    // end the shader
-	    vignette.end();
+		ofEnableAlphaBlending();
+		mainFbo.begin();
+			ofClear(0, 0, 0, 0);
+			vignette.begin();
+		    	
+		    	// set uniforms
+		    	vignette.setUniform2f("center", ofMap(northStar.x, 0, ofGetWidth(), 0, 1), ofMap(northStar.y, 0, ofGetHeight(), 0, 1));
+		    	vignette.setUniform1f("radius", ofMap(mouseX, 0, ofGetWidth(), 0, 1));
+		    	vignette.setUniform1f("softness", 1);
+		    	vignette.setUniform1f("opacity", 1.0);
+		    	vignette.setUniform2f("resolution", ofGetWidth(), ofGetHeight());
+		    	vignette.setUniform1f("time", ofMap(mouseY, 0, ofGetHeight(), 0, 1));
+		    	// draw our image plane
+		    	cam.draw(0, 0);
+		    
+		    // end the shader
+		    vignette.end();
+	    mainFbo.end();
+	    ofDisableAlphaBlending();
+
+	    mainFbo.draw(0, 0);
 
 		ofEnableBlendMode(OF_BLENDMODE_ADD);
 	    

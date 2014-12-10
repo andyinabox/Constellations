@@ -3,6 +3,8 @@
 #include "ofMain.h"
 #include "ofxCv.h"
 #include "ofxGui.h"
+#include "ofxAutoReloadedShader.h"
+
 
 class Constellations : public ofBaseApp {
 
@@ -109,9 +111,12 @@ class Constellations : public ofBaseApp {
 		vector<ofPoint> stars;
 
 		// shader stuff
-		ofShader shader;
-		ofShader vignette;
-		ofShader twinkle;
+		ofFbo mainFbo;
+
+
+		ofxAutoReloadedShader shader;
+		ofxAutoReloadedShader vignette;
+		ofxAutoReloadedShader twinkle;
 		
 		int period;
 		float start_t;
