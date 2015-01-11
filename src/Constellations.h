@@ -4,6 +4,7 @@
 #include "ofxCv.h"
 #include "ofxGui.h"
 #include "ofxAutoReloadedShader.h"
+#include "ofxMSATimer.h"
 
 
 class Constellations : public ofBaseApp {
@@ -111,8 +112,9 @@ class Constellations : public ofBaseApp {
 		vector<ofPoint> stars;
 
 		// shader stuff
-		ofFbo mainFbo;
+		ofxMSATimer timer;
 
+		ofFbo mainFbo;
 
 		ofxAutoReloadedShader shader;
 		ofxAutoReloadedShader vignette;

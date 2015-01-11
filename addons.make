@@ -3,4 +3,5 @@ ofxCv
 ofxGui
 ofxXmlSettings
 ofxAutoReloadedShader
+ofxMSATimer
 
