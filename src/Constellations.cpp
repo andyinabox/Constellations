@@ -41,7 +41,7 @@ void Constellations::setup(){
 	ofSetVerticalSync(true);
 
 	// by default, set the north star to be in the center
-	// since we're doubling canvas width/height in the 
+	// since we're doubling canvas width/height in the
 	// final version, this should put the star in the center
 	northStar = ofPoint(camWidth/2, camHeight/2);
 
@@ -67,9 +67,9 @@ void Constellations::setup(){
 	gui.add(thresh.setup("Thresh level", 100.0, 0.0, 255.0));
 	// gui.add(useAutoThreshold.setup("Auto threshold", false));
 	// gui.add(useDilate.setup("Dilate", true));
-	gui.add(dilateIterations.setup("Dilate iterations", 1, 0, 10));	
+	gui.add(dilateIterations.setup("Dilate iterations", 1, 0, 10));
 	// gui.add(useErode.setup("Erode", true));
-	gui.add(erodeIterations.setup("Erode iterations", 1, 0, 10));	
+	gui.add(erodeIterations.setup("Erode iterations", 1, 0, 10));
 	gui.add(dilateErodeInvert.setup("Invert order", false));
 
 	// stars
@@ -96,7 +96,7 @@ void Constellations::setup(){
 
 //--------------------------------------------------------------
 void Constellations::update(){
-	
+
 	cam.update();
 
 
@@ -121,7 +121,7 @@ void Constellations::update(){
 				, 150
 			);
 		}
-		
+
 
 		// update all images
 		base.update();
@@ -135,7 +135,7 @@ void Constellations::update(){
 
 //--------------------------------------------------------------
 void Constellations::draw(){
- 
+
  	// resize window for sequence mode
 	if(!isFullScreen && sequenceMode && ofGetWidth() != sequenceWindowWidth) {
 		ofSetWindowShape(sequenceWindowWidth, sequenceWindowHeight);
@@ -149,17 +149,17 @@ void Constellations::draw(){
 
 	if(sequenceMode) {
 		// shader.begin();
-	    	
+
 	 //    	// set uniforms
 	 //    	shader.setUniform1f("time", Constellations::getSequenceTime());
 	 //    	shader.setUniform1f("period", period);
 	 //    	shader.setUniform1i("active", true);
 
 	 //    	// draw our image plane
-	 //    	ofPushMatrix();	
+	 //    	ofPushMatrix();
 	 //    		cam.draw(0, 0);
 	 //    	ofPopMatrix();
-	    
+
 	 //    // end the shader
 	 //    shader.end();
 
@@ -167,7 +167,7 @@ void Constellations::draw(){
 		mainFbo.begin();
 			ofClear(0, 0, 0, 0);
 			vignette.begin();
-		    	
+
 		    	// set uniforms
 		    	vignette.setUniform2f("center", ofMap(northStar.x, 0, ofGetWidth(), 0, 1), ofMap(northStar.y, 0, ofGetHeight(), 0, 1));
 		    	vignette.setUniform1f("radius", ofMap(mouseX, 0, ofGetWidth(), 0, 1));
@@ -177,7 +177,7 @@ void Constellations::draw(){
 		    	vignette.setUniform1f("time", ofMap(mouseY, 0, ofGetHeight(), 0, 1));
 		    	// draw our image plane
 		    	cam.draw(0, 0);
-		    
+
 		    // end the shader
 		    vignette.end();
 	    mainFbo.end();
@@ -186,7 +186,7 @@ void Constellations::draw(){
 	    mainFbo.draw(0, 0);
 
 		ofEnableBlendMode(OF_BLENDMODE_ADD);
-	    
+
 	    // twinkle.begin();
 			Constellations::drawStars(
 				ofColor(255, 255, 255)
@@ -224,7 +224,7 @@ void Constellations::draw(){
 
 					//
 					// SHOW STARS
-					// 
+					//
 					if(showStars) {
 						Constellations::drawStars(ofColor(255,255,255), minStarRadius, maxStarRadius);
 					}
@@ -252,7 +252,7 @@ void Constellations::draw(){
 
 
 		// show HUD
-		// 
+		//
 		string hud = "";
 		// display frames per second
 		hud += ofToString(ofGetFrameRate(), 2) + " fps";
@@ -283,7 +283,7 @@ void Constellations::findStars() {
 		, procWidth
 		, procHeight
 		, true
-	);	
+	);
 
 	// prep image for corner detection
 	Constellations::prepImage(
@@ -317,7 +317,7 @@ void Constellations::drawStars(
 	, float minRadius
 	, float maxRadius
 ) {
-	
+
 	ofPushMatrix();
 		ofSetColor(color);
 
@@ -331,7 +331,7 @@ void Constellations::drawStars(
 
 				if(!drawStarsAsPoints) {
 					// we are drawing this at 2x scale
-					ofDrawCircle(stars[i], starRadius);
+					ofCircle(stars[i], starRadius);
 				} else {
 					ofBeginShape();
 						ofVertex(stars[i].x, stars[i].y, ofMap(i, 0, stars.size(), 9, 1));
@@ -353,7 +353,7 @@ void Constellations::createBaseImage(
 	, bool convertToGray
 ) {
 	// ofImage out;
-	ofPixels pix = src.getPixels();
+	ofPixels pix = src.getPixelsRef();
 
 	// only resize if necessary
 	if(
@@ -402,7 +402,7 @@ void Constellations::prepImage(
 
 	// thresholding
 	ofxCv::threshold(dstMat, threshAmount, true);
-	ofxCv::invert(dstMat);		
+	ofxCv::invert(dstMat);
 
 	// dilate & erode
 	// can invert order for "opening" and "closing"
@@ -438,7 +438,7 @@ void Constellations::findContours(
 
 	// coherent line drawing
 	ofxCv::CLD(tmpMat, dstMat, halfw, smoothPasses, sigma1, sigma2, tau, black);
-	
+
 	// invert line
 	ofxCv::invert(dstMat);
 
@@ -446,7 +446,7 @@ void Constellations::findContours(
 	ofxCv::threshold(dstMat, threshold);
 
 	// thin the contours
-	ofxCv::thin(dstMat);	
+	ofxCv::thin(dstMat);
 }
 
 
@@ -485,8 +485,8 @@ vector<ofPoint> Constellations::findPoints(
 		// minDistance – Minimum possible Euclidean distance
 		// between the returned corners.
 		minDistance,
-		// mask – Optional region of interest. If the image is not empty 
-		// (it needs to have the type CV_8UC1 and the same size as image ), 
+		// mask – Optional region of interest. If the image is not empty
+		// (it needs to have the type CV_8UC1 and the same size as image ),
 		// it specifies the region in which the corners are detected.
 		cv::Mat(),
 		// blockSize – Size of an average block for computing a derivative
@@ -563,6 +563,6 @@ void Constellations::gotMessage(ofMessage msg){
 }
 
 //--------------------------------------------------------------
-void Constellations::dragEvent(ofDragInfo dragInfo){ 
+void Constellations::dragEvent(ofDragInfo dragInfo){
 
 }
