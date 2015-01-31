@@ -4,4 +4,4 @@ ofxGui
 ofxXmlSettings
 ofxAutoReloadedShader
 ofxMSATimer
-
+ofxSecondWindow

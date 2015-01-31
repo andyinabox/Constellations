@@ -6,6 +6,9 @@
 #include "ofxAutoReloadedShader.h"
 #include "ofxMSATimer.h"
 
+#ifndef OF_TARGET_LINUXARMV6L
+	#include "ofxSecondWindow.h"
+#endif
 
 class Vespers : public ofBaseApp {
 
@@ -165,4 +168,9 @@ class Vespers : public ofBaseApp {
 		// sequence mode
 		ofxLabel sequenceLabel;
 		ofxToggle sequenceMode;
+
+		#ifndef OF_TARGET_LINUXARMV6L
+			// timeline window
+			ofxSecondWindow timelineWindow;
+		#endif
 };
