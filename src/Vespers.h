@@ -4,10 +4,9 @@
 #include "ofxCv.h"
 #include "ofxGui.h"
 #include "ofxAutoReloadedShader.h"
+#include "ofxTimeline.h"
 
-#ifndef OF_TARGET_LINUXARMV6L
-	#include "ofxTimeline.h"
-#endif
+#include "VespersCv.h"
 
 class Vespers : public ofBaseApp {
 
@@ -24,49 +23,9 @@ class Vespers : public ofBaseApp {
 			, float minRadius
 			, float maxRadius
 		);
+    
+        void toggleDashboard(bool b);
 
-		void createBaseImage(
-			ofVideoGrabber &src
-			, ofImage &dst
-			, int destWidth
-			, int destHeight
-			, bool convertToGray
-		);
-
-		void prepImage(
-			ofImage &src
-			, ofImage &dst
-			, bool smoothing
-			, int smoothDiameter
-			, float smoothSigmaColor
-			, float smoothSigmaSpace
-			, float threshAmount
-			, int dilateIterations
-			, int erodeIterations
-			, bool invertDilateErode
-		);
-
-		void findContours(
-			ofVideoGrabber &src
-			, ofImage &dst
-			, int halfw
-			, int smoothPasses
-			, float sigma1
-			, float sigma2
-			, float tau
-			, int black
-			, int thresh
-		);
-
-		vector<ofPoint> findPoints(
-			ofImage &src
-			, int maxStars
-			, double qualityLevel
-			, double minDistance
-			, int blockSize
-			, int destWidth
-			, int destHEight
-		);
 
 		void keyPressed(int key);
 		void keyReleased(int key);
@@ -84,7 +43,7 @@ class Vespers : public ofBaseApp {
 		int sequenceWindowHeight;
 
 		bool isFullScreen;
-
+    
 		// a grabber for our camera
 		ofVideoGrabber cam;
 
@@ -166,8 +125,5 @@ class Vespers : public ofBaseApp {
 		ofxLabel sequenceLabel;
 		ofxToggle sequenceMode;
 
-		#ifndef OF_TARGET_LINUXARMV6L
-			ofxTimeline timeline;
-		#endif
-
+        ofxTimeline timeline;
 };

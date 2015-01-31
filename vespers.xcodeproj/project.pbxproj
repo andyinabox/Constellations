@@ -90,6 +90,7 @@
 		C1A1F7101A7D5BB300CEB8FC /* EFX-Util.lib in Frameworks */ = {isa = PBXBuildFile; fileRef = C1A1F6DD1A7D5BB300CEB8FC /* EFX-Util.lib */; };
 		C1A1F7111A7D5BB300CEB8FC /* OpenAL32.lib in Frameworks */ = {isa = PBXBuildFile; fileRef = C1A1F6DE1A7D5BB300CEB8FC /* OpenAL32.lib */; };
 		C1A1F7121A7D5BB300CEB8FC /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C1A1F6E51A7D5BB300CEB8FC /* libsndfile.a */; };
+		C1A1F7171A7D63F700CEB8FC /* VespersCv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1A1F7151A7D63F700CEB8FC /* VespersCv.cpp */; };
 		C602002DE761F9B52DB4400A /* ObjectFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE75A3FBA2C2D87D14F06FE6 /* ObjectFinder.cpp */; };
 		D3301F6A0B43BB293ED97C1D /* ofxCvShortImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4DD23693DFAB8EC05FAA5D /* ofxCvShortImage.cpp */; };
 		DBCB84A37F9AECC254870D79 /* Wrappers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D347FB65D19015303863922A /* Wrappers.cpp */; };
@@ -374,6 +375,8 @@
 		C1A1F6E21A7D5BB300CEB8FC /* sndfile.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sndfile.hh; sourceTree = "<group>"; };
 		C1A1F6E51A7D5BB300CEB8FC /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsndfile.a; sourceTree = "<group>"; };
 		C1A1F6EB1A7D5BB300CEB8FC /* libsndfile-1.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "libsndfile-1.dll"; sourceTree = "<group>"; };
+		C1A1F7151A7D63F700CEB8FC /* VespersCv.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VespersCv.cpp; sourceTree = "<group>"; };
+		C1A1F7161A7D63F700CEB8FC /* VespersCv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VespersCv.h; sourceTree = "<group>"; };
 		C1C56D20A1A57DC44096BFE7 /* ofxCvContourFinder.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxCvContourFinder.h; path = ../../../addons/ofxOpenCv/src/ofxCvContourFinder.h; sourceTree = SOURCE_ROOT; };
 		C4FB85020773DA0F09B8B6CE /* ts_gtest.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ts_gtest.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/ts/ts_gtest.h; sourceTree = SOURCE_ROOT; };
 		C6151136D101F857DAE12722 /* ofxCvImage.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxCvImage.cpp; path = ../../../addons/ofxOpenCv/src/ofxCvImage.cpp; sourceTree = SOURCE_ROOT; };
@@ -1392,6 +1395,8 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				C1A1F7151A7D63F700CEB8FC /* VespersCv.cpp */,
+				C1A1F7161A7D63F700CEB8FC /* VespersCv.h */,
 				C1A1F44E1A7D5A0F00CEB8FC /* Vespers.cpp */,
 				C1A1F44F1A7D5A0F00CEB8FC /* Vespers.h */,
 				C1A1F4501A7D5A0F00CEB8FC /* VespersTimeline.cpp */,
@@ -1592,6 +1597,7 @@
 				87B479F55285F413D96B5A45 /* ofxSecondWindow.cpp in Sources */,
 				F6CA03081709FCBFDAEF6676 /* ofxTextInputField.cpp in Sources */,
 				6499B8489905BFE9067F8DB8 /* ofxTimecode.cpp in Sources */,
+				C1A1F7171A7D63F700CEB8FC /* VespersCv.cpp in Sources */,
 				C1A1F6FB1A7D5BB300CEB8FC /* ofxTLImageSequenceFrame.cpp in Sources */,
 				168C43F69AF6A8042EA0B13F /* easing_terms_of_use.html in Sources */,
 				9266028E1AECBB027ABF64D8 /* ofxEasing.cpp in Sources */,
