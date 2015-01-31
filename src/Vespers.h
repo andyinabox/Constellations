@@ -15,6 +15,8 @@ class Vespers : public ofBaseApp {
 		void update();
 		void draw();
 
+        void drawMain();
+    
 		void resetSequenceTime();
 		float getSequenceTime();
 		void findStars();
@@ -56,12 +58,9 @@ class Vespers : public ofBaseApp {
 
 		// base image for processing
 		ofImage base;
-
 		// processed greyscale image
 		ofImage gray;
 
-		// image for find contours
-		ofImage contours;
 
 		// canvas for final image
 		ofRectangle canvas;
