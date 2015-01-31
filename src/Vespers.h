@@ -6,7 +6,7 @@
 #include "ofxAutoReloadedShader.h"
 
 #ifndef OF_TARGET_LINUXARMV6L
-	#include "VespersTimeline.h"
+	#include "ofxTimeline.h"
 #endif
 
 class Vespers : public ofBaseApp {
@@ -167,7 +167,7 @@ class Vespers : public ofBaseApp {
 		ofxToggle sequenceMode;
 
 		#ifndef OF_TARGET_LINUXARMV6L
-			VespersTimeline timeline;
+			ofxTimeline timeline;
 		#endif
 
 };
