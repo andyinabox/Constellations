@@ -5,7 +5,7 @@ void Vespers::setup(){
 	ofSetWindowTitle("Vespers: Main");
 
 	#ifndef OF_TARGET_LINUXARMV6L
-		timelineWindow.setup("Vespers: Timeline", 50, 50, 1024, 768, false);
+		timeline.setup();
 	#endif
 
 	// window dimensions for config mode
@@ -142,12 +142,7 @@ void Vespers::update(){
 void Vespers::draw(){
 
 	#ifndef OF_TARGET_LINUXARMV6L
-		timelineWindow.begin();
-			ofBackground(255);
-			ofSetColor(0, 0, 255);
-			ofDrawBitmapString("this is the\nsecond window", 30, 65);
-			ofEllipse(20, 20, 60, 30);
-		timelineWindow.end();
+		timeline.draw();
 	#endif
 
  	// resize window for sequence mode

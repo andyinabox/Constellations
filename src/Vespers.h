@@ -4,10 +4,9 @@
 #include "ofxCv.h"
 #include "ofxGui.h"
 #include "ofxAutoReloadedShader.h"
-#include "ofxMSATimer.h"
 
 #ifndef OF_TARGET_LINUXARMV6L
-	#include "ofxSecondWindow.h"
+	#include "VespersTimeline.h"
 #endif
 
 class Vespers : public ofBaseApp {
@@ -115,8 +114,6 @@ class Vespers : public ofBaseApp {
 		vector<ofPoint> stars;
 
 		// shader stuff
-		ofxMSATimer timer;
-
 		ofFbo mainFbo;
 
 		ofxAutoReloadedShader shader;
@@ -170,7 +167,7 @@ class Vespers : public ofBaseApp {
 		ofxToggle sequenceMode;
 
 		#ifndef OF_TARGET_LINUXARMV6L
-			// timeline window
-			ofxSecondWindow timelineWindow;
+			VespersTimeline timeline;
 		#endif
+
 };
