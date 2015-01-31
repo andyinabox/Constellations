@@ -141,9 +141,7 @@ void Vespers::update(){
 //--------------------------------------------------------------
 void Vespers::draw(){
 
-	#ifndef OF_TARGET_LINUXARMV6L
-		timeline.draw();
-	#endif
+
 
  	// resize window for sequence mode
 	if(!isFullScreen && sequenceMode && ofGetWidth() != sequenceWindowWidth) {
@@ -270,7 +268,15 @@ void Vespers::draw(){
 		// draw hud
 		ofDrawBitmapStringHighlight(hud, guiWidth + 5, 15);
 
+        
+        
 	}
+
+
+#ifndef OF_TARGET_LINUXARMV6L
+    timeline.draw();
+#endif
+
 }
 
 

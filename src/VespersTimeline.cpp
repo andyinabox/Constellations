@@ -16,8 +16,8 @@ void VespersTimeline::setup(){
 	timeline.addCurves("Rotate Y", ofRange(0, 360));
 
 	//Flags are little markers that you can attach text to
-		//They are only useful when listening to bangFired() events
-		//so that you know when one has passed
+    //They are only useful when listening to bangFired() events
+    //so that you know when one has passed
 	timeline.addColors("Colors");
 
 	//setting framebased to true results in the timeline never skipping frames
@@ -36,8 +36,8 @@ void VespersTimeline::update(){
 void VespersTimeline::draw(){
 
 	timelineWindow.begin();
-		ofBackground(0);
-		timeline.draw();
+        ofBackground(0);
+        timeline.draw();
 	timelineWindow.end();
 
 }
