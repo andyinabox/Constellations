@@ -14,8 +14,9 @@ class Vespers : public ofBaseApp {
 		void setup();
 		void update();
 		void draw();
-
-        void drawMain();
+    
+        void receivedBang(ofxTLBangEventArgs& bang);
+        void drawHud(int x, int y);
     
 		void resetSequenceTime();
 		float getSequenceTime();
@@ -26,8 +27,6 @@ class Vespers : public ofBaseApp {
 			, float maxRadius
 		);
     
-        void toggleDashboard(bool b);
-
 
 		void keyPressed(int key);
 		void keyReleased(int key);
@@ -73,6 +72,7 @@ class Vespers : public ofBaseApp {
 
 		// shader stuff
 		ofFbo mainFbo;
+        ofFbo starsFbo;
 
 		ofxAutoReloadedShader shader;
 		ofxAutoReloadedShader vignette;

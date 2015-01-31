@@ -2,7 +2,10 @@
 
 //--------------------------------------------------------------
 void Vespers::setup(){
-
+	ofSetFrameRate(60);
+	ofSetVerticalSync(true);
+    ofEnableSmoothing();
+    
 	// window dimensions for config mode
 	configWindowWidth = 1200;
 	configWindowHeight = 900;
@@ -34,9 +37,6 @@ void Vespers::setup(){
 	cam.setDesiredFrameRate(30);
 	cam.initGrabber(camWidth,camHeight);
 
-        // what does this do exactly?
-	ofSetVerticalSync(true);
-
 	// by default, set the north star to be in the center
 	// since we're doubling canvas width/height in the
 	// final version, this should put the star in the center
@@ -46,6 +46,12 @@ void Vespers::setup(){
 	mainFbo.begin();
 		ofClear(0, 0, 0, 0);
 	mainFbo.end();
+    
+	starsFbo.allocate(camWidth, camHeight);
+	starsFbo.begin();
+        ofClear(0, 0, 0, 0);
+	starsFbo.end();
+    
 	// setup gui
 	gui.setup();
 	gui.add(prepLabel.setup("// IMAGE PREP", ""));
@@ -89,6 +95,17 @@ void Vespers::setup(){
 	// sequence mode
 	gui.add(sequenceLabel.setup("// SEQUENCE", ""));
 	gui.add(sequenceMode.setup("Sequence mode", false));
+    
+    
+	timeline.setup();
+	timeline.setFrameRate(30);
+	timeline.setDurationInFrames(90);
+	timeline.setLoopType(OF_LOOP_NORMAL);
+    
+	timeline.addCurves("Vignette Radius", ofRange(0, 1));
+    timeline.addBangs("Capture Stars");
+    ofAddListener(timeline.events().bangFired, this, &Vespers::receivedBang);
+    
 }
 
 //--------------------------------------------------------------
@@ -97,8 +114,6 @@ void Vespers::update(){
 	cam.update();
 
 	if(cam.isFrameNew()) {
-		// create base image
-		Vespers::findStars();
 		// update all images
 		base.update();
 		gray.update();
@@ -109,7 +124,7 @@ void Vespers::update(){
 void Vespers::draw(){
     ofClear(0,0,0);
 
-
+    
  	// resize window for sequence mode
 	if(!isFullScreen && sequenceMode && ofGetWidth() != sequenceWindowWidth) {
 		ofSetWindowShape(sequenceWindowWidth, sequenceWindowHeight);
@@ -118,75 +133,87 @@ void Vespers::draw(){
 		ofSetWindowShape(configWindowWidth, configWindowHeight);
 	}
 
+    starsFbo.begin();
+        ofClear(0, 0, 0, 0);
+        // draw stars
+        Vespers::drawStars(
+           ofColor(255, 255, 255)
+           , minStarRadius
+           , maxStarRadius
+           );
+    starsFbo.end();
+    
+    // render the main fbo
+    mainFbo.begin();
+        ofClear(0, 0, 0, 0);
+        vignette.begin();
+    
+        // set uniforms
+        vignette.setUniform2f("center", ofMap(northStar.x, 0, ofGetWidth(), 0, 1), ofMap(northStar.y, 0, ofGetHeight(), 0, 1));
+        vignette.setUniform1f("radius", timeline.getValue("Vignette Radius"));
+        vignette.setUniform1f("softness", 1);
+        vignette.setUniform1f("opacity", 1.0);
+        vignette.setUniform2f("resolution", ofGetWidth(), ofGetHeight());
+        vignette.setUniform1f("time", ofMap(mouseY, 0, ofGetHeight(), 0, 1));
+        // draw our image plane
+        cam.draw(0, 0);
+    
+        // end the shader
+        vignette.end();
+    mainFbo.end();
 
+
+
+    
     // show gui
     gui.setPosition(0, 0);
     gui.draw();
     
 
     ofPushMatrix();
-
         // move everything to the right of gui
         ofTranslate(guiWidth, 0);
+        // (not sure if this is necessary or not)
+        ofDisableAlphaBlending();
+        // draw the main image FBO
+        mainFbo.draw(0, 0);
+        // switch to additive blend mode
+        ofEnableBlendMode(OF_BLENDMODE_ADD);
     
-        Vespers::drawMain();
-    
+        starsFbo.draw(0, 0);
+        // draw base image in greyscale
         base.draw(sequenceWindowWidth,0);
+        // draw thresholded image
         gray.draw(sequenceWindowWidth, procHeight);
     
     ofPopMatrix();
 
 
+    // draw the Hud
+    Vespers::drawHud(guiWidth + 5, 15);
+
+    timeline.draw();
+
+}
+
+void Vespers::receivedBang(ofxTLBangEventArgs& bang) {
+    ofLogNotice("Bang fired from track " + bang.track->getName());
+    if(bang.track->getName() == "Capture Stars"){
+        Vespers::findStars();
+    }
+}
 
 
-    // show HUD
-    //
+void Vespers::drawHud(int x, int y) {
+    // draw HUD
     string hud = "";
     // display frames per second
     hud += ofToString(ofGetFrameRate(), 2) + " fps";
     // display elapsed time
     hud += " / " + ofToString(t, 1) + "sec";
     // draw hud
-    ofDrawBitmapStringHighlight(hud, guiWidth + 5, 15);
-
-        
-        
-
+    ofDrawBitmapStringHighlight(hud, x, y);
 }
-
-void Vespers::drawMain() {
-    mainFbo.begin();
-    ofClear(0, 0, 0, 0);
-    vignette.begin();
-    
-    // set uniforms
-    vignette.setUniform2f("center", ofMap(northStar.x, 0, ofGetWidth(), 0, 1), ofMap(northStar.y, 0, ofGetHeight(), 0, 1));
-    vignette.setUniform1f("radius", ofMap(mouseX, 0, ofGetWidth(), 0, 1));
-    vignette.setUniform1f("softness", 1);
-    vignette.setUniform1f("opacity", 1.0);
-    vignette.setUniform2f("resolution", ofGetWidth(), ofGetHeight());
-    vignette.setUniform1f("time", ofMap(mouseY, 0, ofGetHeight(), 0, 1));
-    // draw our image plane
-    cam.draw(0, 0);
-    
-    // end the shader
-    vignette.end();
-    mainFbo.end();
-    
-    ofDisableAlphaBlending();
-    
-    mainFbo.draw(0, 0);
-    
-    ofEnableBlendMode(OF_BLENDMODE_ADD);
-    
-    // twinkle.begin();
-    Vespers::drawStars(
-       ofColor(255, 255, 255)
-       , minStarRadius
-       , maxStarRadius
-       );
-}
-
 
 
 
@@ -272,11 +299,14 @@ void Vespers::keyPressed(int key){
 
 	switch(key) {
 		case 's': sequenceMode = !sequenceMode; break;
-		case ' ' :
-			Vespers::findStars();
-			Vespers::resetSequenceTime();
-			break;
-		case 'f': isFullScreen = !isFullScreen; ofToggleFullscreen(); break;
+        case 't' :
+            timeline.toggleShow();
+            break;
+//		case ' ' :
+//			Vespers::findStars();
+//			Vespers::resetSequenceTime();
+//			break;
+//		case 'f': isFullScreen = !isFullScreen; ofToggleFullscreen(); break;
 	}
 }
 
