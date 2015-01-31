@@ -1,7 +1,7 @@
-#include "Constellations.h"
+#include "Vespers.h"
 
 //--------------------------------------------------------------
-void Constellations::setup(){
+void Vespers::setup(){
 
 	// window dimensions for config mode
 	configWindowWidth = 840;
@@ -23,7 +23,7 @@ void Constellations::setup(){
 
 	// shader vars
 	period = 10;
-	Constellations::resetSequenceTime();
+	Vespers::resetSequenceTime();
 
 	// just targeting opengl for now
 	shader.load("shadersGL2/shader");
@@ -95,7 +95,7 @@ void Constellations::setup(){
 }
 
 //--------------------------------------------------------------
-void Constellations::update(){
+void Vespers::update(){
 
 	cam.update();
 
@@ -103,13 +103,13 @@ void Constellations::update(){
 	if(cam.isFrameNew() && !sequenceMode) {
 
 		// create base image
-		Constellations::findStars();
+		Vespers::findStars();
 
 
 
 		// if enabled, find contours
 		if(showContours) {
-			Constellations::findContours(
+			Vespers::findContours(
 				cam
 				, contours
 				, 4
@@ -134,7 +134,7 @@ void Constellations::update(){
 }
 
 //--------------------------------------------------------------
-void Constellations::draw(){
+void Vespers::draw(){
 
  	// resize window for sequence mode
 	if(!isFullScreen && sequenceMode && ofGetWidth() != sequenceWindowWidth) {
@@ -151,7 +151,7 @@ void Constellations::draw(){
 		// shader.begin();
 
 	 //    	// set uniforms
-	 //    	shader.setUniform1f("time", Constellations::getSequenceTime());
+	 //    	shader.setUniform1f("time", Vespers::getSequenceTime());
 	 //    	shader.setUniform1f("period", period);
 	 //    	shader.setUniform1i("active", true);
 
@@ -188,7 +188,7 @@ void Constellations::draw(){
 		ofEnableBlendMode(OF_BLENDMODE_ADD);
 
 	    // twinkle.begin();
-			Constellations::drawStars(
+			Vespers::drawStars(
 				ofColor(255, 255, 255)
 				, minStarRadius
 				, maxStarRadius
@@ -226,7 +226,7 @@ void Constellations::draw(){
 					// SHOW STARS
 					//
 					if(showStars) {
-						Constellations::drawStars(ofColor(255,255,255), minStarRadius, maxStarRadius);
+						Vespers::drawStars(ofColor(255,255,255), minStarRadius, maxStarRadius);
 					}
 
 					//
@@ -266,18 +266,18 @@ void Constellations::draw(){
 
 
 
-void Constellations::resetSequenceTime() {
+void Vespers::resetSequenceTime() {
 	start_t = ofGetElapsedTimef();
 	t = 0;
 }
 
-float Constellations::getSequenceTime() {
+float Vespers::getSequenceTime() {
 	return ofGetElapsedTimef() - start_t;
 }
 
-void Constellations::findStars() {
+void Vespers::findStars() {
 	// create base image
-	Constellations::createBaseImage(
+	Vespers::createBaseImage(
 		cam
 		, base
 		, procWidth
@@ -286,7 +286,7 @@ void Constellations::findStars() {
 	);
 
 	// prep image for corner detection
-	Constellations::prepImage(
+	Vespers::prepImage(
 		base
 		, gray
 		, useBilateralFilter
@@ -300,7 +300,7 @@ void Constellations::findStars() {
 	);
 
 
-	stars = Constellations::findPoints(
+	stars = Vespers::findPoints(
 		gray,
 		maxStars,
 		qualityLevel,
@@ -312,7 +312,7 @@ void Constellations::findStars() {
 	stars.push_back(northStar);
 }
 
-void Constellations::drawStars(
+void Vespers::drawStars(
 	ofColor color
 	, float minRadius
 	, float maxRadius
@@ -345,7 +345,7 @@ void Constellations::drawStars(
 /*
 	Create base image to be used for image processing
  */
-void Constellations::createBaseImage(
+void Vespers::createBaseImage(
 	ofVideoGrabber &src
 	, ofImage &dst
 	, int destWidth
@@ -375,7 +375,7 @@ void Constellations::createBaseImage(
 /*
 	Prep image for processing
  */
-void Constellations::prepImage(
+void Vespers::prepImage(
 	ofImage &src
 	, ofImage &dst
 	, bool smoothing
@@ -420,7 +420,7 @@ void Constellations::prepImage(
 /*
 	Find contours of image
  */
-void Constellations::findContours(
+void Vespers::findContours(
 	ofVideoGrabber &src
 	, ofImage &dst
 	, int halfw
@@ -453,7 +453,7 @@ void Constellations::findContours(
 /*
 	Find features within an image
  */
-vector<ofPoint> Constellations::findPoints(
+vector<ofPoint> Vespers::findPoints(
 	ofImage &src,
 	int maxStars,
 	double qualityLevel,
@@ -510,30 +510,30 @@ vector<ofPoint> Constellations::findPoints(
 
 
 //--------------------------------------------------------------
-void Constellations::keyPressed(int key){
+void Vespers::keyPressed(int key){
 
 	switch(key) {
 		case 's': sequenceMode = !sequenceMode; break;
 		case ' ' :
-			Constellations::findStars();
-			Constellations::resetSequenceTime();
+			Vespers::findStars();
+			Vespers::resetSequenceTime();
 			break;
 		case 'f': isFullScreen = !isFullScreen; ofToggleFullscreen(); break;
 	}
 }
 
 //--------------------------------------------------------------
-void Constellations::keyReleased(int key){
+void Vespers::keyReleased(int key){
 
 }
 
 //--------------------------------------------------------------
-void Constellations::mouseMoved(int x, int y ){
+void Vespers::mouseMoved(int x, int y ){
 
 }
 
 //--------------------------------------------------------------
-void Constellations::mouseDragged(int x, int y, int button){
+void Vespers::mouseDragged(int x, int y, int button){
 	int transX = x-guiWidth;
 	int transY = y-procHeight;
 
@@ -544,25 +544,25 @@ void Constellations::mouseDragged(int x, int y, int button){
 }
 
 //--------------------------------------------------------------
-void Constellations::mousePressed(int x, int y, int button){
+void Vespers::mousePressed(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void Constellations::mouseReleased(int x, int y, int button){
+void Vespers::mouseReleased(int x, int y, int button){
 }
 
 //--------------------------------------------------------------
-void Constellations::windowResized(int w, int h){
-
-}
-
-//--------------------------------------------------------------
-void Constellations::gotMessage(ofMessage msg){
+void Vespers::windowResized(int w, int h){
 
 }
 
 //--------------------------------------------------------------
-void Constellations::dragEvent(ofDragInfo dragInfo){
+void Vespers::gotMessage(ofMessage msg){
+
+}
+
+//--------------------------------------------------------------
+void Vespers::dragEvent(ofDragInfo dragInfo){
 
 }

@@ -1,5 +1,5 @@
 #include "ofMain.h"
-#include "Constellations.h"
+#include "Vespers.h"
 
 //========================================================================
 int main( ){
@@ -8,6 +8,6 @@ int main( ){
 	// this kicks off the running of my app
 	// can be OF_WINDOW or OF_FULLSCREEN
 	// pass in width and height too:
-	ofRunApp(new Constellations());
+	ofRunApp(new Vespers());
 
 }

@@ -1,8 +1,11 @@
-constellations
+Vespers
 ===============
 
 Release Notes
 --------------
+
+### 0.4.0
+ - Renamed to "Vespers"
 
 ### 0.3.1
  - Silly fix, somehow changes to "VERSION" doc didn't get changed

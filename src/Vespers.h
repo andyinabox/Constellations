@@ -7,7 +7,7 @@
 #include "ofxMSATimer.h"
 
 
-class Constellations : public ofBaseApp {
+class Vespers : public ofBaseApp {
 
 	public:
 		void setup();
@@ -107,7 +107,7 @@ class Constellations : public ofBaseApp {
 
 		// this will be the placeable "central" star
 		ofPoint northStar;
- 
+
 		// store our stars
 		vector<ofPoint> stars;
 
@@ -119,7 +119,7 @@ class Constellations : public ofBaseApp {
 		ofxAutoReloadedShader shader;
 		ofxAutoReloadedShader vignette;
 		ofxAutoReloadedShader twinkle;
-		
+
 		int period;
 		float start_t;
 		float t;
@@ -164,5 +164,5 @@ class Constellations : public ofBaseApp {
 
 		// sequence mode
 		ofxLabel sequenceLabel;
-		ofxToggle sequenceMode;		
+		ofxToggle sequenceMode;
 };
