@@ -23,10 +23,8 @@ void Vespers::setup(){
 
 	// toggle fullscreen mode
 	isFullScreen = false;
-
-	// shader vars
-	period = 10;
-
+    sequenceMode = false;
+    
 	// just targeting opengl for now
 	camShader.load("shadersGL2/camShader");
 	starShader.load("shadersGL2/starShader");
@@ -41,14 +39,9 @@ void Vespers::setup(){
 	northStar = ofPoint(camWidth/2, camHeight/2);
 
 	mainFbo.allocate(camWidth, camHeight);
-	mainFbo.begin();
-		ofClear(0, 0, 0, 0);
-	mainFbo.end();
-
 	starsFbo.allocate(camWidth, camHeight);
-	starsFbo.begin();
-        ofClear(0, 0, 0, 0);
-	starsFbo.end();
+    afterImageFbo.allocate(camWidth, camHeight);
+    
 
     drawGui = false;
 	// setup gui
@@ -97,6 +90,7 @@ void Vespers::setup(){
     timeline.addBangs("Capture Stars");
     timeline.addColors("Video Color");
     timeline.addCurves("Color Mix");
+    timeline.addSwitches("Show AfterImage");
     ofAddListener(timeline.events().bangFired, this, &Vespers::receivedBang);
     timeline.play();
 
@@ -162,7 +156,11 @@ void Vespers::draw(){
         camShader.end();
     mainFbo.end();
 
-
+    if (timeline.isSwitchOn("Show AfterImage")) {
+        afterImageFbo.begin();
+            afterImage.draw(0, 0);
+        afterImageFbo.end();
+    }
 
 
     // show gui
@@ -177,8 +175,13 @@ void Vespers::draw(){
         ofTranslate(guiWidth, 0);
         // draw the main image FBO
         mainFbo.draw(0, 0);
-        // switch to additive blend mode
+        // draw afterimage
+        if (timeline.isSwitchOn("Show AfterImage")) {
+            afterImageFbo.draw(0,0);
+        }
+        // draw stars
         starsFbo.draw(0, 0);
+
         // draw base image in greyscale
         base.draw(sequenceWindowWidth,0);
         // draw thresholded image
@@ -198,6 +201,7 @@ void Vespers::receivedBang(ofxTLBangEventArgs& bang) {
     ofLogNotice("Bang fired from track " + bang.track->getName());
     if(bang.track->getName() == "Capture Stars"){
         Vespers::findStars();
+        afterImage.setFromPixels(cam.getPixelsRef());
     }
 }
 

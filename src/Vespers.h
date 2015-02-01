@@ -58,8 +58,9 @@ class Vespers : public ofBaseApp {
 		ofImage base;
 		// processed greyscale image
 		ofImage gray;
-
-
+        // afterimage
+        ofImage afterImage;
+    
 		// canvas for final image
 		ofRectangle canvas;
 
@@ -72,6 +73,7 @@ class Vespers : public ofBaseApp {
 		// shader stuff
 		ofFbo mainFbo;
         ofFbo starsFbo;
+        ofFbo afterImageFbo;
 
 		ofxAutoReloadedShader camShader;
 		ofxAutoReloadedShader starShader;
@@ -120,7 +122,7 @@ class Vespers : public ofBaseApp {
 
 		// sequence mode
 		ofxLabel sequenceLabel;
-		ofxToggle sequenceMode;
+		bool sequenceMode;
 
         ofxTimeline timeline;
 };
