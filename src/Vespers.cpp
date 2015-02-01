@@ -5,10 +5,10 @@ void Vespers::setup(){
 	ofSetFrameRate(60);
 	ofSetVerticalSync(true);
     ofEnableSmoothing();
-    
+
 	// window dimensions for config mode
-	configWindowWidth = 1200;
-	configWindowHeight = 900;
+	configWindowWidth = 1160;
+	configWindowHeight = 480;
 	// window dimensions for sequence mode
 	sequenceWindowWidth = 640;
 	sequenceWindowHeight = 480;
@@ -44,12 +44,12 @@ void Vespers::setup(){
 	mainFbo.begin();
 		ofClear(0, 0, 0, 0);
 	mainFbo.end();
-    
+
 	starsFbo.allocate(camWidth, camHeight);
 	starsFbo.begin();
         ofClear(0, 0, 0, 0);
 	starsFbo.end();
-    
+
     drawGui = false;
 	// setup gui
 	gui.setup();
@@ -87,26 +87,17 @@ void Vespers::setup(){
 	gui.add(blockSize.setup("Star block size", 3, 0, 10));
 	gui.add(drawStarsAsPoints.setup("Draw points", false));
 
-	// contours
-	gui.add(contoursLabel.setup("// CONTOURS", ""));
-	gui.add(showContours.setup("Show contours", false));
-
-	// sequence mode
-	gui.add(sequenceLabel.setup("// SEQUENCE", ""));
-	gui.add(sequenceMode.setup("Sequence mode", false));
-    
-    
 	timeline.setup();
 	timeline.setFrameRate(30);
 	timeline.setDurationInFrames(300);
 	timeline.setLoopType(OF_LOOP_NORMAL);
-    
+
 	timeline.addCurves("Vignette Radius", ofRange(0, 1));
 	timeline.addCurves("Stars Alpha", ofRange(0, 1));
     timeline.addBangs("Capture Stars");
     ofAddListener(timeline.events().bangFired, this, &Vespers::receivedBang);
     timeline.play();
-    
+
 }
 
 //--------------------------------------------------------------
@@ -125,7 +116,7 @@ void Vespers::update(){
 void Vespers::draw(){
     ofClear(0,0,0);
 
-    
+
  	// resize window for sequence mode
 	if(!isFullScreen && sequenceMode && ofGetWidth() != sequenceWindowWidth) {
 		ofSetWindowShape(sequenceWindowWidth, sequenceWindowHeight);
@@ -141,12 +132,12 @@ void Vespers::draw(){
        , minStarRadius
        , maxStarRadius
        );
-    
+
     // render the main fbo
     mainFbo.begin();
         ofClear(0, 0, 0, 255);
         camShader.begin();
-    
+
             // set uniforms
             camShader.setUniform2f("center", ofMap(northStar.x, 0, ofGetWidth(), 0, 1), ofMap(northStar.y, 0, ofGetHeight(), 0, 1));
             camShader.setUniform1f("radius", timeline.getValue("Vignette Radius"));
@@ -156,20 +147,20 @@ void Vespers::draw(){
             camShader.setUniform1f("time", ofMap(mouseY, 0, ofGetHeight(), 0, 1));
             // draw our image plane
             cam.draw(0, 0);
-        
+
         // end the shader
         camShader.end();
     mainFbo.end();
 
 
 
-    
+
     // show gui
     if(drawGui) {
         gui.setPosition(0, 0);
         gui.draw();
     }
-    
+
 
     ofPushMatrix();
         // move everything to the right of gui
@@ -182,7 +173,7 @@ void Vespers::draw(){
         base.draw(sequenceWindowWidth,0);
         // draw thresholded image
         gray.draw(sequenceWindowWidth, procHeight);
-    
+
     ofPopMatrix();
 
 
@@ -255,12 +246,12 @@ void Vespers::drawStars(
 	, float minRadius
 	, float maxRadius
 ) {
-    
+
     float starRadius;
-    
+
     starsFbo.begin();
         ofClear(0,0,0,0);
-    
+
         starShader.begin();
 
             starShader.setUniform3f("color",
@@ -268,10 +259,10 @@ void Vespers::drawStars(
                 , ofMap(color.g, 0,  255, 0, 1)
                 , ofMap(color.b, 0,  255, 0, 1)
             );
-    
+
             starShader.setUniform1f("alpha", timeline.getValue("Stars Alpha"));
 
-    
+
             if(stars.size() > 0) {
                 for(int i = 0; i< stars.size(); i++) {
                     // calculate radius based on star "quality" (order) and
