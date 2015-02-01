@@ -95,6 +95,8 @@ void Vespers::setup(){
 	timeline.addCurves("Vignette Radius", ofRange(0, 1));
 	timeline.addCurves("Stars Alpha", ofRange(0, 1));
     timeline.addBangs("Capture Stars");
+    timeline.addColors("Video Color");
+    timeline.addCurves("Color Mix");
     ofAddListener(timeline.events().bangFired, this, &Vespers::receivedBang);
     timeline.play();
 
@@ -144,6 +146,14 @@ void Vespers::draw(){
             camShader.setUniform1f("softness", 1);
             camShader.setUniform1f("opacity", 1.0);
             camShader.setUniform2f("resolution", ofGetWidth(), ofGetHeight());
+    
+            ofColor camColor = timeline.getColor("Video Color");
+            camShader.setUniform3f("inputColor",
+                ofMap(camColor.r, 0, 255, 0, 1),
+                ofMap(camColor.g, 0, 255, 0, 1),
+                ofMap(camColor.b, 0, 255, 0, 1)
+            );
+            camShader.setUniform1f("colorMix", timeline.getValue("Color Mix"));
             camShader.setUniform1f("time", ofMap(mouseY, 0, ofGetHeight(), 0, 1));
             // draw our image plane
             cam.draw(0, 0);

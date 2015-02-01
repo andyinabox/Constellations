@@ -5,11 +5,23 @@
         <width>1160.000000000</width>
         <height>27.000000000</height>
     </element>
+    <element name="Color Mix">
+        <x>0.000000000</x>
+        <y>284.000000000</y>
+        <width>1160.000000000</width>
+        <height>48.000000000</height>
+    </element>
     <element name="Stars Alpha">
         <x>0.000000000</x>
         <y>109.000000000</y>
         <width>1160.000000000</width>
         <height>36.000000000</height>
+    </element>
+    <element name="Video Color">
+        <x>0.000000000</x>
+        <y>220.000000000</y>
+        <width>1160.000000000</width>
+        <height>40.000000000</height>
     </element>
     <element name="Vignette Radius">
         <x>0.000000000</x>
