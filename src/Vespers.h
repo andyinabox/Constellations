@@ -18,8 +18,6 @@ class Vespers : public ofBaseApp {
         void receivedBang(ofxTLBangEventArgs& bang);
         void drawHud(int x, int y);
     
-		void resetSequenceTime();
-		float getSequenceTime();
 		void findStars();
 		void drawStars(
 			ofColor color
@@ -44,6 +42,7 @@ class Vespers : public ofBaseApp {
 		int sequenceWindowHeight;
 
 		bool isFullScreen;
+        bool drawGui;
     
 		// a grabber for our camera
 		ofVideoGrabber cam;
@@ -74,9 +73,8 @@ class Vespers : public ofBaseApp {
 		ofFbo mainFbo;
         ofFbo starsFbo;
 
-		ofxAutoReloadedShader shader;
-		ofxAutoReloadedShader vignette;
-		ofxAutoReloadedShader twinkle;
+		ofxAutoReloadedShader camShader;
+		ofxAutoReloadedShader starShader;
 
 		int period;
 		float start_t;

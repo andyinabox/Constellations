@@ -1,14 +1,26 @@
 <positions>
     <element name="Capture Stars">
         <x>0.000000000</x>
-        <y>116.000000000</y>
+        <y>207.000000000</y>
         <width>1200.000000000</width>
         <height>40.000000000</height>
+    </element>
+    <element name="Stars Alpha">
+        <x>0.000000000</x>
+        <y>124.000000000</y>
+        <width>1200.000000000</width>
+        <height>59.000000000</height>
     </element>
     <element name="Vignette Radius">
         <x>0.000000000</x>
         <y>52.000000000</y>
         <width>1200.000000000</width>
-        <height>40.000000000</height>
+        <height>48.000000000</height>
+    </element>
+    <element name="camShader Radius">
+        <x>0.000000000</x>
+        <y>52.000000000</y>
+        <width>1200.000000000</width>
+        <height>48.000000000</height>
     </element>
 </positions>
