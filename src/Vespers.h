@@ -77,6 +77,7 @@ class Vespers : public ofBaseApp {
 
 		ofxAutoReloadedShader camShader;
 		ofxAutoReloadedShader starShader;
+        ofxAutoReloadedShader afterImageShader;
 
 		int period;
 		float start_t;

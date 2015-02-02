@@ -397,6 +397,8 @@
 		C1A1F72F1A7D95B600CEB8FC /* starShader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = starShader.frag; sourceTree = "<group>"; };
 		C1A1F7301A7D95B600CEB8FC /* starShader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = starShader.vert; sourceTree = "<group>"; };
 		C1C56D20A1A57DC44096BFE7 /* ofxCvContourFinder.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxCvContourFinder.h; path = ../../../addons/ofxOpenCv/src/ofxCvContourFinder.h; sourceTree = SOURCE_ROOT; };
+		C1E0D37F1A7FA465009A5CD2 /* afterImageShader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = afterImageShader.frag; sourceTree = "<group>"; };
+		C1E0D3801A7FA465009A5CD2 /* afterImageShader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = afterImageShader.vert; sourceTree = "<group>"; };
 		C4FB85020773DA0F09B8B6CE /* ts_gtest.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ts_gtest.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/ts/ts_gtest.h; sourceTree = SOURCE_ROOT; };
 		C6151136D101F857DAE12722 /* ofxCvImage.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxCvImage.cpp; path = ../../../addons/ofxOpenCv/src/ofxCvImage.cpp; sourceTree = SOURCE_ROOT; };
 		C61D3DACE506E4A1C3A6D782 /* highgui.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = highgui.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/highgui/highgui.hpp; sourceTree = SOURCE_ROOT; };
@@ -1352,6 +1354,8 @@
 		C1A1F7231A7D952F00CEB8FC /* shadersGL2 */ = {
 			isa = PBXGroup;
 			children = (
+				C1E0D37F1A7FA465009A5CD2 /* afterImageShader.frag */,
+				C1E0D3801A7FA465009A5CD2 /* afterImageShader.vert */,
 				C1A1F72F1A7D95B600CEB8FC /* starShader.frag */,
 				C1A1F7301A7D95B600CEB8FC /* starShader.vert */,
 				C1A1F7261A7D952F00CEB8FC /* twinkle.frag */,

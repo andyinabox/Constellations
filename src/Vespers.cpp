@@ -28,6 +28,7 @@ void Vespers::setup(){
 	// just targeting opengl for now
 	camShader.load("shadersGL2/camShader");
 	starShader.load("shadersGL2/starShader");
+	afterImageShader.load("shadersGL2/afterImageShader");
 
 	// set our framerate and initialize video grabber
 	cam.setDesiredFrameRate(30);
@@ -90,7 +91,8 @@ void Vespers::setup(){
     timeline.addBangs("Capture Stars");
     timeline.addColors("Video Color");
     timeline.addCurves("Color Mix");
-    timeline.addSwitches("Show AfterImage");
+    timeline.addCurves("AfterImage Alpha");
+
     ofAddListener(timeline.events().bangFired, this, &Vespers::receivedBang);
     timeline.play();
 
@@ -156,9 +158,17 @@ void Vespers::draw(){
         camShader.end();
     mainFbo.end();
 
-    if (timeline.isSwitchOn("Show AfterImage")) {
+//    if (timeline.isSwitchOn("Show AfterImage")) {
+    if (timeline.getValue("AfterImage Alpha") > 0) {
+
         afterImageFbo.begin();
-            afterImage.draw(0, 0);
+            afterImageShader.begin();
+                afterImageShader.setUniform1f(
+                    "alpha",
+                    timeline.getValue("AfterImage Alpha")
+                );
+                afterImage.draw(0, 0);
+            afterImageShader.end();
         afterImageFbo.end();
     }
 
@@ -176,7 +186,7 @@ void Vespers::draw(){
         // draw the main image FBO
         mainFbo.draw(0, 0);
         // draw afterimage
-        if (timeline.isSwitchOn("Show AfterImage")) {
+        if (timeline.getValue("AfterImage Alpha") > 0) {
             afterImageFbo.draw(0,0);
         }
         // draw stars
