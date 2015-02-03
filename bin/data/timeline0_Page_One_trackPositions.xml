@@ -5,6 +5,12 @@
         <width>1160.000000000</width>
         <height>40.000000000</height>
     </element>
+    <element name="AfterImage Thresh">
+        <x>0.000000000</x>
+        <y>420.000000000</y>
+        <width>1160.000000000</width>
+        <height>43.000000000</height>
+    </element>
     <element name="Capture Stars">
         <x>0.000000000</x>
         <y>169.000000000</y>

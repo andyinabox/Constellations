@@ -5,7 +5,7 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>3D38C80C-BA30-445A-8F7E-79B8EF468FFA</string>
+	<string>5BD11404-DA61-461E-8AF0-C0D6E5FB18CD</string>
 	<key>IDESourceControlProjectName</key>
 	<string>vespers</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
@@ -30,8 +30,6 @@
 		<string>https://github.com/paulobarcelos/ofxMacamPs3Eye.git</string>
 		<key>ED64EDCF-D979-4DEE-893F-434CA0C89F87</key>
 		<string>https://github.com/genekogan/ofxSecondWindow.git</string>
-		<key>F4F55672-D481-4C17-826A-C0C23C2EEE1F</key>
-		<string>https://github.com/andreasmuller/ofxAutoReloadedShader.git</string>
 		<key>FAAC4FD3-F534-44EC-9D48-8D6C59ABE615</key>
 		<string>https://github.com/andyinabox/ofxCv.git</string>
 	</dict>
@@ -48,7 +46,7 @@
 		<key>3CB7791C-3410-4D91-97AA-7D91340C2FD8</key>
 		<string>../../../../../addons/ofxMSATimer</string>
 		<key>448E9127-586B-4CC3-ABDE-D5951FA3BC5C</key>
-		<string>../../../../../addons</string>
+		<string>../../../../../addons/ofxAutoReloadedShader</string>
 		<key>75635D61-CB55-4A8F-AE9B-ADF8CCB3B367</key>
 		<string>../../../../../addons/ofxTimecode</string>
 		<key>7E919BE3-0DDD-409C-B27B-C399766A78AD</key>
@@ -59,8 +57,6 @@
 		<string>../../../../../addons/ofxMacamPs3Eye</string>
 		<key>ED64EDCF-D979-4DEE-893F-434CA0C89F87</key>
 		<string>../../../../../addons/ofxSecondWindow</string>
-		<key>F4F55672-D481-4C17-826A-C0C23C2EEE1F</key>
-		<string>../../../../../addons/ofxAutoReloadedShader</string>
 		<key>FAAC4FD3-F534-44EC-9D48-8D6C59ABE615</key>
 		<string>../../../../../addons/ofxCv</string>
 	</dict>
@@ -84,9 +80,9 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>F4F55672-D481-4C17-826A-C0C23C2EEE1F</string>
+			<string>448E9127-586B-4CC3-ABDE-D5951FA3BC5C</string>
 			<key>IDESourceControlWCCName</key>
-			<string>ofxAutoReloadedShader</string>
+			<string>addons</string>
 		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>

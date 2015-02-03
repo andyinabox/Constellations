@@ -83,15 +83,15 @@ void Vespers::setup(){
 
 	timeline.setup();
 	timeline.setFrameRate(30);
-	timeline.setDurationInFrames(300);
+	timeline.setDurationInFrames(450);
 	timeline.setLoopType(OF_LOOP_NORMAL);
 
 	timeline.addCurves("Vignette Radius", ofRange(0, 1));
 	timeline.addCurves("Stars Alpha", ofRange(0, 1));
     timeline.addBangs("Capture Stars");
     timeline.addColors("Video Color");
-    timeline.addCurves("Color Mix");
-    timeline.addCurves("AfterImage Alpha");
+    timeline.addCurves("Color Mix", ofRange(0,1));
+    timeline.addCurves("AfterImage Alpha", ofRange(0,1));
 
     ofAddListener(timeline.events().bangFired, this, &Vespers::receivedBang);
     timeline.play();
@@ -113,8 +113,7 @@ void Vespers::update(){
 //--------------------------------------------------------------
 void Vespers::draw(){
     ofClear(0,0,0);
-
-
+    
  	// resize window for sequence mode
 	if(!isFullScreen && sequenceMode && ofGetWidth() != sequenceWindowWidth) {
 		ofSetWindowShape(sequenceWindowWidth, sequenceWindowHeight);
@@ -123,40 +122,43 @@ void Vespers::draw(){
 		ofSetWindowShape(configWindowWidth, configWindowHeight);
 	}
 
-
-    // draw stars
-    Vespers::drawStars(
-       ofColor(255, 255, 255)
-       , minStarRadius
-       , maxStarRadius
-       );
+    if(timeline.getValue("Stars Alpha") > 0) {
+        // draw stars
+        Vespers::drawStars(
+           ofColor(255, 255, 255)
+           , minStarRadius
+           , maxStarRadius
+           );
+    }
 
     // render the main fbo
-    mainFbo.begin();
-        ofClear(0, 0, 0, 255);
-        camShader.begin();
+    if(timeline.getValue("Vignette Radius") > 0) {
+        mainFbo.begin();
+            ofClear(0, 0, 0, 255);
+            camShader.begin();
 
-            // set uniforms
-            camShader.setUniform2f("center", ofMap(northStar.x, 0, ofGetWidth(), 0, 1), ofMap(northStar.y, 0, ofGetHeight(), 0, 1));
-            camShader.setUniform1f("radius", timeline.getValue("Vignette Radius"));
-            camShader.setUniform1f("softness", 1);
-            camShader.setUniform1f("opacity", 1.0);
-            camShader.setUniform2f("resolution", ofGetWidth(), ofGetHeight());
-    
-            ofColor camColor = timeline.getColor("Video Color");
-            camShader.setUniform3f("inputColor",
-                ofMap(camColor.r, 0, 255, 0, 1),
-                ofMap(camColor.g, 0, 255, 0, 1),
-                ofMap(camColor.b, 0, 255, 0, 1)
-            );
-            camShader.setUniform1f("colorMix", timeline.getValue("Color Mix"));
-            camShader.setUniform1f("time", ofMap(mouseY, 0, ofGetHeight(), 0, 1));
-            // draw our image plane
-            cam.draw(0, 0);
+                // set uniforms
+                camShader.setUniform2f("center", ofMap(northStar.x, 0, ofGetWidth(), 0, 1), ofMap(northStar.y, 0, ofGetHeight(), 0, 1));
+                camShader.setUniform1f("radius", timeline.getValue("Vignette Radius"));
+                camShader.setUniform1f("softness", 1);
+                camShader.setUniform1f("opacity", 1.0);
+                camShader.setUniform2f("resolution", camWidth, camHeight);
+        
+                ofColor camColor = timeline.getColor("Video Color");
+                camShader.setUniform3f("inputColor",
+                    ofMap(camColor.r, 0, 255, 0, 1),
+                    ofMap(camColor.g, 0, 255, 0, 1),
+                    ofMap(camColor.b, 0, 255, 0, 1)
+                );
+                camShader.setUniform1f("colorMix", timeline.getValue("Color Mix"));
+                camShader.setUniform1f("time", ofMap(mouseY, 0, ofGetHeight(), 0, 1));
+                // draw our image plane
+                cam.draw(0, 0);
 
-        // end the shader
-        camShader.end();
-    mainFbo.end();
+            // end the shader
+            camShader.end();
+        mainFbo.end();
+    }
 
 //    if (timeline.isSwitchOn("Show AfterImage")) {
     if (timeline.getValue("AfterImage Alpha") > 0) {
@@ -167,6 +169,7 @@ void Vespers::draw(){
                     "alpha",
                     timeline.getValue("AfterImage Alpha")
                 );
+                afterImageShader.setUniform2f("resolution", camWidth, camHeight);
                 afterImage.draw(0, 0);
             afterImageShader.end();
         afterImageFbo.end();
@@ -184,13 +187,17 @@ void Vespers::draw(){
         // move everything to the right of gui
         ofTranslate(guiWidth, 0);
         // draw the main image FBO
-        mainFbo.draw(0, 0);
+        if(timeline.getValue("Vignette Radius") > 0) {
+            mainFbo.draw(0, 0);
+        }
         // draw afterimage
         if (timeline.getValue("AfterImage Alpha") > 0) {
             afterImageFbo.draw(0,0);
         }
         // draw stars
-        starsFbo.draw(0, 0);
+        if(timeline.getValue("Stars Alpha") > 0) {
+            starsFbo.draw(0, 0);
+        }
 
         // draw base image in greyscale
         base.draw(sequenceWindowWidth,0);
