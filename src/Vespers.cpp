@@ -92,6 +92,7 @@ void Vespers::setup(){
     timeline.addColors("Video Color");
     timeline.addCurves("Color Mix", ofRange(0,1));
     timeline.addCurves("AfterImage Alpha", ofRange(0,1));
+    timeline.addCurves("AfterImage Blur", ofRange(0,50));
 
     ofAddListener(timeline.events().bangFired, this, &Vespers::receivedBang);
     timeline.play();
@@ -169,6 +170,12 @@ void Vespers::draw(){
                     "alpha",
                     timeline.getValue("AfterImage Alpha")
                 );
+                afterImageShader.setUniform1f(
+                  "blur",
+                  timeline.getValue("AfterImage Blur")
+                  );
+                afterImageShader.setUniform2f("center", ofMap(northStar.x, 0, ofGetWidth(), 0, 1), ofMap(northStar.y, 0, ofGetHeight(), 0, 1));
+
                 afterImageShader.setUniform2f("resolution", camWidth, camHeight);
                 afterImage.draw(0, 0);
             afterImageShader.end();
