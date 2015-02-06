@@ -4,6 +4,11 @@ Vespers
 Release Notes
 --------------
 
+### 0.5.1
+ - Lots of timeline stuff
+ - Shader for after image
+ - Using xcode now.
+
 ### 0.5.0
  - Added timeline
 
