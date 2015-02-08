@@ -127,6 +127,18 @@ void main()
     
     vec4 color = blurX(tex0, texCoordVarying.xy, blur);
     
+    float limit = 0.8;
+    
+//    if(color.r+color.g+color.b < limit) {
+//        color.rgb = vec3(0.0);
+//    } else if(color.r+color.g+color.b < limit*1.1) {
+//        color.rgb = color.rgb*0.5;
+//    } else if(color.r+color.g+color.b < limit*1.5) {
+//        color.rgb = color.rgb*0.33333;
+//    }
+//    
+    color.rgb = mix(color.rgb, vec3(1.0), color.r+color.g+color.b/3-limit);
+    
 //    vec2 position = (gl_FragCoord.xy / resolution.xy) - center; //vec2(center.x, (1.0-center.y));//- vec2(0.5);
 
     float avg = 0.299*color.r + 0.587*color.g + 0.114*color.b;
