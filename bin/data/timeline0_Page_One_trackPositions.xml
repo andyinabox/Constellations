@@ -1,13 +1,13 @@
 <positions>
     <element name="AfterImage Alpha">
         <x>0.000000000</x>
-        <y>356.000000000</y>
+        <y>374.000000000</y>
         <width>1160.000000000</width>
         <height>33.000000000</height>
     </element>
     <element name="AfterImage Blur">
         <x>0.000000000</x>
-        <y>413.000000000</y>
+        <y>431.000000000</y>
         <width>1160.000000000</width>
         <height>42.000000000</height>
     </element>
@@ -19,13 +19,13 @@
     </element>
     <element name="Capture Stars">
         <x>0.000000000</x>
-        <y>169.000000000</y>
+        <y>209.000000000</y>
         <width>1160.000000000</width>
         <height>27.000000000</height>
     </element>
     <element name="Color Mix">
         <x>0.000000000</x>
-        <y>284.000000000</y>
+        <y>302.000000000</y>
         <width>1160.000000000</width>
         <height>48.000000000</height>
     </element>
@@ -37,21 +37,27 @@
     </element>
     <element name="Stars Alpha">
         <x>0.000000000</x>
-        <y>109.000000000</y>
+        <y>97.000000000</y>
         <width>1160.000000000</width>
-        <height>36.000000000</height>
+        <height>24.000000000</height>
+    </element>
+    <element name="Stars Rotation">
+        <x>0.000000000</x>
+        <y>145.000000000</y>
+        <width>1160.000000000</width>
+        <height>40.000000000</height>
     </element>
     <element name="Video Color">
         <x>0.000000000</x>
-        <y>220.000000000</y>
+        <y>260.000000000</y>
         <width>1160.000000000</width>
-        <height>40.000000000</height>
+        <height>18.000000000</height>
     </element>
     <element name="Vignette Radius">
         <x>0.000000000</x>
         <y>52.000000000</y>
         <width>1160.000000000</width>
-        <height>33.000000000</height>
+        <height>21.000000000</height>
     </element>
     <element name="camShader Radius">
         <x>0.000000000</x>

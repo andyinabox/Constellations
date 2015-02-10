@@ -116,6 +116,8 @@ class Vespers : public ofBaseApp {
 		ofxFloatSlider minDistance;
 		ofxFloatSlider blockSize;
 		ofxToggle drawStarsAsPoints;
+        ofxFloatSlider starsCamPan;
+//        ofxFloatSlider starsCamRotate;
 
 		// contours
 		ofxLabel contoursLabel;
@@ -126,4 +128,7 @@ class Vespers : public ofBaseApp {
 		bool sequenceMode;
 
         ofxTimeline timeline;
+    
+        ofCamera starsCam; // add mouse controls for camera movement
+        ofMesh starsMesh;
 };
