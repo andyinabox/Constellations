@@ -27,23 +27,3 @@ The look I'm going for is similar to Memo's work on the [Wombats "Techno Fan" vi
 I am also using Kyle McDonald's notes from the 2012 Eyeo Festival workshop ["Intermediate Computer Vision with openFrameworks"](https://github.com/kylemcdonald/ofxCv/wiki/Intermediate-Computer-Vision-with-openFrameworks) and the examples (and source) in the [ofxCv repository](https://github.com/kylemcdonald/ofxCv) to learn how to use the ofxCv library. I created [my own fork of the ofxCv repo](https://github.com/andyinabox/ofxCv) so that I can comment some of the example code for my own reference (Kyle doesn't seem to believe in code comments ;) ).
 
 And of course there's the [openCv docs](http://docs.opencv.org/modules/refman.html).
-
-Todo
-----
- - [ ] Set up a basic animation sequence (use ofxMSATimer?)
- 	- [ ] Vignette entrance and cutoff
- 	- [ ] "stars" entrance
- 	- [ ] Repeat
- - [ ] Fullscreen in target display for "sequence mode"
- - [ ] Improve performance
- - [ ] Testing in target display
- - [ ] Improve visual effects
- 	- [ ] Color for main sunrise/sunset sequence
- 	- [ ] Star "twinkling"
- 	- [ ] Background stars
- 	- [ ] Star rotation
- 	- [ ] Will inverted "after-image" be necessary?
- - [ ] Hardware stuff
-	- [ ] Port back to rPi?
- 	- [ ] Integrate physical lighting control
- 	- [ ] Rpi camera
