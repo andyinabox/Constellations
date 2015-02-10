@@ -221,7 +221,13 @@ void Vespers::draw(){
         }
         // draw stars
         if(timeline.getValue("Stars Alpha") > 0) {
-            starsFbo.draw(0, 0);
+            // seemed to fix the star flickering problem when
+            // i set up the shader here rather than in the fbo
+            starShader.begin();                
+                starShader.setUniform1f("alpha", timeline.getValue("Stars Alpha"));
+                starShader.setUniform1f("time", ofGetElapsedTimef());
+                starsFbo.draw(0, 0);
+            starShader.end();
         }
 
         // draw base image in greyscale
@@ -343,7 +349,7 @@ void Vespers::drawStars(
     starsFbo.begin();
         ofClear(0,0,0,0);
 
-        starShader.begin();
+//        starShader.begin();
 
             starShader.setUniform3f("color",
                 ofMap(color.r, 0, 255, 0, 1)
@@ -372,7 +378,7 @@ void Vespers::drawStars(
                 }
             }
             starsCam.end();
-        starShader.end();
+//        starShader.end();
 
     starsFbo.end();
 }
