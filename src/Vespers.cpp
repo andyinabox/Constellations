@@ -79,7 +79,7 @@ void Vespers::setup(){
 	// stars
 	gui.add(starsLabel.setup("// STARS", ""));
 	gui.add(showStars.setup("Show stars", true));
-	gui.add(maxStarRadius.setup("Max star radius", 2.0, 0.0, 10.0));
+	gui.add(maxStarRadius.setup("Max star radius", 1.5, 0.0, 10.0));
 	gui.add(minStarRadius.setup("Min star radius", 0.5, 0.0, 10.0));
 	gui.add(maxStars.setup("Max star count", 40, 1, 100));
 	// gui.add(maxStarSize.setup("max star size", 1.5, 0.0, 10.0));
@@ -198,50 +198,55 @@ void Vespers::update(){
 //--------------------------------------------------------------
 void Vespers::draw(){
     ofClear(0,0,0);
-    
 
 
-    // show gui
-    if(drawGui) {
-        gui.setPosition(0, 0);
-        gui.draw();
+    // move everything to the right of gui
+    ofTranslate(0, 0);
+    // draw the main image FBO
+    if(timeline.getValue("Vignette Radius") > 0) {
+        mainFbo.draw(0, 0);
     }
 
+    // draw stars
+    if(timeline.getValue("Stars Alpha") > 0) {
+        // seemed to fix the star flickering problem when
+        // i set up the shader here rather than in the fbo
+        starShader.begin();
 
-    ofPushMatrix();
-        // move everything to the right of gui
-        ofTranslate(guiWidth, 0);
-        // draw the main image FBO
-        if(timeline.getValue("Vignette Radius") > 0) {
-            mainFbo.draw(0, 0);
-        }
-        // draw afterimage
-        if (timeline.getValue("AfterImage Alpha") > 0) {
-            afterImageFbo.draw(0,0);
-        }
-        // draw stars
-        if(timeline.getValue("Stars Alpha") > 0) {
-            // seemed to fix the star flickering problem when
-            // i set up the shader here rather than in the fbo
-            starShader.begin();                
-                starShader.setUniform1f("alpha", timeline.getValue("Stars Alpha"));
-                starShader.setUniform1f("time", ofGetElapsedTimef());
-                starsFbo.draw(0, 0);
-            starShader.end();
-        }
+            starShader.setUniform1f("alpha", timeline.getValue("Stars Alpha"));
+            starShader.setUniform1f("time", ofGetElapsedTimef());
+            starsFbo.draw(0, 0);
 
+        starShader.end();
+    }
+
+    // draw afterimage
+    if (timeline.getValue("AfterImage Alpha") > 0) {
+        ofEnableBlendMode(OF_BLENDMODE_ADD);
+        afterImageFbo.draw(0,0);
+        ofDisableBlendMode();
+    }
+
+    
+    if(!sequenceMode) {
+
+        // show gui
+        if(drawGui) {
+            gui.setPosition(sequenceWindowWidth, 0);
+            gui.draw();
+        }
+        
         // draw base image in greyscale
-        base.draw(sequenceWindowWidth,0);
+        base.draw(sequenceWindowWidth+guiWidth,0);
         // draw thresholded image
-        gray.draw(sequenceWindowWidth, procHeight);
-
-    ofPopMatrix();
+        gray.draw(sequenceWindowWidth+guiWidth, procHeight);
 
 
-    // draw the Hud
-    Vespers::drawHud(guiWidth + 5, 15);
+        // draw the Hud
+        Vespers::drawHud(5, 15);
 
-    timeline.draw();
+        timeline.draw();
+    }
 
 }
 
@@ -255,6 +260,7 @@ void Vespers::receivedBang(ofxTLBangEventArgs& bang) {
 
 
 void Vespers::drawHud(int x, int y) {
+    
     // draw HUD
     string hud = "";
     // display frames per second
@@ -356,15 +362,17 @@ void Vespers::drawStars(
                 , ofMap(color.g, 0,  255, 0, 1)
                 , ofMap(color.b, 0,  255, 0, 1)
             );
+    
+            float alpha = timeline.getValue("Stars Alpha");
 
-            starShader.setUniform1f("alpha", timeline.getValue("Stars Alpha"));
+            starShader.setUniform1f("alpha", alpha);
             starShader.setUniform1f("time", ofGetElapsedTimef());
     
             // draw the mesh
             starsCam.begin();
 //                starsMesh.drawVertices();
             if(stars.size() > 0) {
-                for(int i = 0; i< stars.size(); i++) {
+                for(int i = 0; i< stars.size()*alpha; i++) {
                     // calculate radius based on star "quality" (order) and
                     // star radius max/min
                     starRadius = (((maxRadius-minRadius)/stars.size())*i)+minRadius;
@@ -396,7 +404,7 @@ void Vespers::keyPressed(int key){
 //			Vespers::findStars();
 //			Vespers::resetSequenceTime();
 //			break;
-//		case 'f': isFullScreen = !isFullScreen; ofToggleFullscreen(); break;
+		case 'f': isFullScreen = !isFullScreen; ofToggleFullscreen(); break;
 	}
 }
 
