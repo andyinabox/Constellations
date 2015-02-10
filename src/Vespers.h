@@ -69,6 +69,7 @@ class Vespers : public ofBaseApp {
 
 		// store our stars
 		vector<ofPoint> stars;
+        vector<ofPoint> randomStars;
 
 		// shader stuff
 		ofFbo mainFbo;

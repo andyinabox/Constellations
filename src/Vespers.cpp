@@ -94,12 +94,13 @@ void Vespers::setup(){
     
 	timeline.setup();
 	timeline.setFrameRate(30);
-	timeline.setDurationInFrames(450);
+	timeline.setDurationInFrames(570);
 	timeline.setLoopType(OF_LOOP_NORMAL);
 
 	timeline.addCurves("Vignette Radius", ofRange(0, 1));
 	timeline.addCurves("Stars Alpha", ofRange(0, 1));
-    timeline.addCurves("Stars Rotation", ofRange(0,360));
+	timeline.addCurves("Random Stars", ofRange(0, 1));
+    timeline.addCurves("Stars Rotation", ofRange(-90.f,90.f));
     timeline.addBangs("Capture Stars");
     timeline.addColors("Video Color");
     timeline.addCurves("Color Mix", ofRange(0,1));
@@ -113,6 +114,7 @@ void Vespers::setup(){
 //    starsMesh.setMode(OF_PRIMITIVE_POINTS);
 	starsCam.setScale(1,-1,1);
 
+    randomStars.resize(50);
 }
 
 //--------------------------------------------------------------
@@ -150,7 +152,7 @@ void Vespers::update(){
         camShader.begin();
         
         // set uniforms
-        camShader.setUniform2f("center", ofMap(northStar.x, 0, ofGetWidth(), 0, 1), ofMap(northStar.y, 0, ofGetHeight(), 0, 1));
+        camShader.setUniform2f("center", ofMap(northStar.x, 0, sequenceWindowWidth, 0, 1), ofMap(northStar.y, 0, sequenceWindowHeight, 0, 1));
         camShader.setUniform1f("radius", timeline.getValue("Vignette Radius"));
         camShader.setUniform1f("softness", 1);
         camShader.setUniform1f("opacity", 1.0);
@@ -185,7 +187,7 @@ void Vespers::update(){
                                       "blur",
                                       timeline.getValue("AfterImage Blur")
                                       );
-        afterImageShader.setUniform2f("center", ofMap(northStar.x, 0, ofGetWidth(), 0, 1), ofMap(northStar.y, 0, ofGetHeight(), 0, 1));
+        afterImageShader.setUniform2f("center", ofMap(northStar.x, 0, sequenceWindowWidth, 0, 1), ofMap(northStar.y, 0, sequenceWindowHeight, 0, 1));
         
         afterImageShader.setUniform2f("resolution", camWidth, camHeight);
         afterImage.draw(0, 0);
@@ -245,6 +247,10 @@ void Vespers::draw(){
         // draw the Hud
         Vespers::drawHud(5, 15);
 
+//        if(isFullScreen) {
+//            ofTranslate(0, sequenceWindowHeight);
+//        }
+        
         timeline.draw();
     }
 
@@ -273,6 +279,12 @@ void Vespers::drawHud(int x, int y) {
 
 
 void Vespers::findStars() {
+    
+    // add extra stars
+    for(int j = 0; j < randomStars.size(); j++) {
+        randomStars[j] = ofPoint(ofRandom(camWidth*1.5), ofRandom(camHeight*1.5), 0);
+    }
+    
 	// create base image
     VespersCv::createBaseImage(
 		cam
@@ -307,6 +319,7 @@ void Vespers::findStars() {
 		camHeight
 	);
 	stars.push_back(northStar);
+    
 }
 
 void Vespers::drawStars(
@@ -370,6 +383,8 @@ void Vespers::drawStars(
     
             // draw the mesh
             starsCam.begin();
+            ofEnableDepthTest();
+
 //                starsMesh.drawVertices();
             if(stars.size() > 0) {
                 for(int i = 0; i< stars.size()*alpha; i++) {
@@ -377,14 +392,19 @@ void Vespers::drawStars(
                     // star radius max/min
                     starRadius = (((maxRadius-minRadius)/stars.size())*i)+minRadius;
                     
-                    starDistance = 100/stars.size()*i;
+//                    starDistance = 100/stars.size()*i;
                     
-                    ofEnableDepthTest();
 //                    starsMesh.addVertex(ofVec3f(stars[i].x, stars[i].y, starDistance));
-                    ofDrawSphere(ofVec3f(stars[i].x, stars[i].y, stars[i].z*100), starRadius);
-                    ofDisableDepthTest();
+                    ofDrawSphere(stars[i], starRadius);
                 }
             }
+    
+            float randomStarsAmt = timeline.getValue("Random Stars");
+            for(int j=0; j < randomStars.size()*randomStarsAmt; j++) {
+                ofDrawSphere(randomStars[j], minRadius);
+            }
+    
+            ofDisableDepthTest();
             starsCam.end();
 //        starShader.end();
 

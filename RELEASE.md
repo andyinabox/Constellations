@@ -4,6 +4,14 @@ Vespers
 Release Notes
 --------------
 
+### 0.6.0
+ - Fixed star flickering issue
+ - Added star rotation
+ - Added slight blur to stars
+ - Added random stars
+ - Extended timeline
+ - Timing changes
+
 ### 0.5.1
  - Lots of timeline stuff
  - Shader for after image
