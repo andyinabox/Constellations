@@ -109,16 +109,17 @@ class Vespers : public ofBaseApp {
 
 		// stars
 		ofxLabel starsLabel;
-		ofxToggle showStars;
-		ofxFloatSlider maxStarRadius;
+        ofxToggle alwaysUpdateStars;
+        ofxFloatSlider maxStarRadius;
 		ofxFloatSlider minStarRadius;
 		ofxIntSlider maxStars;
 		ofxFloatSlider qualityLevel;
 		ofxFloatSlider minDistance;
 		ofxFloatSlider blockSize;
-		ofxToggle drawStarsAsPoints;
         ofxFloatSlider starsCamPan;
-//        ofxFloatSlider starsCamRotate;
+        ofxFloatSlider starsCamZoom;
+        ofxIntSlider maxRandomStars;
+
 
 		// contours
 		ofxLabel contoursLabel;

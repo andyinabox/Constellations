@@ -383,22 +383,22 @@
 		C1A1F71D1A7D952F00CEB8FC /* defaultColors.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = defaultColors.xml; sourceTree = "<group>"; };
 		C1A1F71E1A7D952F00CEB8FC /* NewMedia Fett.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewMedia Fett.ttf"; sourceTree = "<group>"; };
 		C1A1F71F1A7D952F00CEB8FC /* settings.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = settings.xml; sourceTree = "<group>"; };
-		C1A1F7211A7D952F00CEB8FC /* shader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader.frag; sourceTree = "<group>"; };
-		C1A1F7221A7D952F00CEB8FC /* shader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader.vert; sourceTree = "<group>"; };
-		C1A1F7261A7D952F00CEB8FC /* twinkle.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = twinkle.frag; sourceTree = "<group>"; };
-		C1A1F7271A7D952F00CEB8FC /* twinkle.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = twinkle.geom; sourceTree = "<group>"; };
-		C1A1F7281A7D952F00CEB8FC /* twinkle.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = twinkle.vert; sourceTree = "<group>"; };
 		C1A1F7291A7D952F00CEB8FC /* camShader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = camShader.frag; sourceTree = "<group>"; };
 		C1A1F72A1A7D952F00CEB8FC /* camShader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = camShader.vert; sourceTree = "<group>"; };
 		C1A1F72B1A7D952F00CEB8FC /* timeline0_Capture_Stars.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = timeline0_Capture_Stars.xml; sourceTree = "<group>"; };
 		C1A1F72C1A7D952F00CEB8FC /* timeline0_Page_One_trackPositions.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = timeline0_Page_One_trackPositions.xml; sourceTree = "<group>"; };
 		C1A1F72D1A7D952F00CEB8FC /* timeline0_Vignette_Radius.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = timeline0_Vignette_Radius.xml; sourceTree = "<group>"; };
-		C1A1F72E1A7D952F00CEB8FC /* timeline0_zoomer.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = timeline0_zoomer.xml; sourceTree = "<group>"; };
 		C1A1F72F1A7D95B600CEB8FC /* starShader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = starShader.frag; sourceTree = "<group>"; };
 		C1A1F7301A7D95B600CEB8FC /* starShader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = starShader.vert; sourceTree = "<group>"; };
 		C1C56D20A1A57DC44096BFE7 /* ofxCvContourFinder.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxCvContourFinder.h; path = ../../../addons/ofxOpenCv/src/ofxCvContourFinder.h; sourceTree = SOURCE_ROOT; };
 		C1E0D37F1A7FA465009A5CD2 /* afterImageShader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = afterImageShader.frag; sourceTree = "<group>"; };
 		C1E0D3801A7FA465009A5CD2 /* afterImageShader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = afterImageShader.vert; sourceTree = "<group>"; };
+		C1E9A77E1A8BFD1A00830987 /* afterImageShader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = afterImageShader.frag; sourceTree = "<group>"; };
+		C1E9A77F1A8BFD1A00830987 /* afterImageShader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = afterImageShader.vert; sourceTree = "<group>"; };
+		C1E9A7801A8BFD1A00830987 /* camShader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = camShader.frag; sourceTree = "<group>"; };
+		C1E9A7811A8BFD1A00830987 /* camShader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = camShader.vert; sourceTree = "<group>"; };
+		C1E9A7821A8BFD1A00830987 /* starShader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = starShader.frag; sourceTree = "<group>"; };
+		C1E9A7831A8BFD1A00830987 /* starShader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = starShader.vert; sourceTree = "<group>"; };
 		C4FB85020773DA0F09B8B6CE /* ts_gtest.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ts_gtest.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/ts/ts_gtest.h; sourceTree = SOURCE_ROOT; };
 		C6151136D101F857DAE12722 /* ofxCvImage.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxCvImage.cpp; path = ../../../addons/ofxOpenCv/src/ofxCvImage.cpp; sourceTree = SOURCE_ROOT; };
 		C61D3DACE506E4A1C3A6D782 /* highgui.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = highgui.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/highgui/highgui.hpp; sourceTree = SOURCE_ROOT; };
@@ -1326,7 +1326,6 @@
 				C1A1F72B1A7D952F00CEB8FC /* timeline0_Capture_Stars.xml */,
 				C1A1F72C1A7D952F00CEB8FC /* timeline0_Page_One_trackPositions.xml */,
 				C1A1F72D1A7D952F00CEB8FC /* timeline0_Vignette_Radius.xml */,
-				C1A1F72E1A7D952F00CEB8FC /* timeline0_zoomer.xml */,
 			);
 			name = data;
 			path = bin/data;
@@ -1345,8 +1344,12 @@
 		C1A1F7201A7D952F00CEB8FC /* shadersES2 */ = {
 			isa = PBXGroup;
 			children = (
-				C1A1F7211A7D952F00CEB8FC /* shader.frag */,
-				C1A1F7221A7D952F00CEB8FC /* shader.vert */,
+				C1E9A77E1A8BFD1A00830987 /* afterImageShader.frag */,
+				C1E9A77F1A8BFD1A00830987 /* afterImageShader.vert */,
+				C1E9A7801A8BFD1A00830987 /* camShader.frag */,
+				C1E9A7811A8BFD1A00830987 /* camShader.vert */,
+				C1E9A7821A8BFD1A00830987 /* starShader.frag */,
+				C1E9A7831A8BFD1A00830987 /* starShader.vert */,
 			);
 			path = shadersES2;
 			sourceTree = "<group>";
@@ -1358,9 +1361,6 @@
 				C1E0D3801A7FA465009A5CD2 /* afterImageShader.vert */,
 				C1A1F72F1A7D95B600CEB8FC /* starShader.frag */,
 				C1A1F7301A7D95B600CEB8FC /* starShader.vert */,
-				C1A1F7261A7D952F00CEB8FC /* twinkle.frag */,
-				C1A1F7271A7D952F00CEB8FC /* twinkle.geom */,
-				C1A1F7281A7D952F00CEB8FC /* twinkle.vert */,
 				C1A1F7291A7D952F00CEB8FC /* camShader.frag */,
 				C1A1F72A1A7D952F00CEB8FC /* camShader.vert */,
 			);
