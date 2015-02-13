@@ -36,24 +36,24 @@ class Vespers : public ofBaseApp {
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
+        // dimensions
+        int camWidth;
+        int camHeight;
+        int procWidth;
+        int procHeight;
+        int guiWidth;
 		int configWindowWidth;
 		int configWindowHeight;
 		int sequenceWindowWidth;
 		int sequenceWindowHeight;
 
+        // toggles
 		bool isFullScreen;
         bool drawGui;
-    
+        bool sequenceMode;
+
 		// a grabber for our camera
 		ofVideoGrabber cam;
-
-		// size of our image
-		int camWidth;
-		int camHeight;
-		int procWidth;
-		int procHeight;
-		int guiWidth;
-
 		// base image for processing
 		ofImage base;
 		// processed greyscale image
@@ -74,36 +74,20 @@ class Vespers : public ofBaseApp {
 		// shader stuff
 		ofFbo mainFbo;
         ofFbo starsFbo;
-        ofFbo afterImageFbo;
 
 		ofxAutoReloadedShader camShader;
 		ofxAutoReloadedShader starShader;
         ofxAutoReloadedShader afterImageShader;
 
-		int period;
-		float start_t;
-		float t;
-
-		// gui stuff
+        // GUI
+    
 		ofxPanel gui;
 		ofxLabel prepLabel;
 
 		// image prep
 		ofxToggle useBilateralFilter;
-		// ofxIntSlider bfDiameter;
-		int bfDiameter;
-		// ofxFloatSlider bfSigmaColor;
-		float bfSigmaColor;
-		// ofxFloatSlider bfSigmaSpace;
-		float bfSigmaSpace;
-		// ofxToggle useNormalize;
-		bool useNormalize;
-		// ofxToggle useManualThreshold;
 		ofxFloatSlider thresh;
-		// ofxToggle useAutoThreshold;
-		// ofxToggle useDilate;
 		ofxIntSlider dilateIterations;
-		// ofxToggle useErode;
 		ofxIntSlider erodeIterations;
 		ofxToggle dilateErodeInvert;
 
@@ -116,21 +100,16 @@ class Vespers : public ofBaseApp {
 		ofxFloatSlider qualityLevel;
 		ofxFloatSlider minDistance;
 		ofxFloatSlider blockSize;
+        ofxIntSlider maxRandomStars;
+        ofxToggle orbitStars;
         ofxFloatSlider starsCamPan;
         ofxFloatSlider starsCamZoom;
-        ofxIntSlider maxRandomStars;
 
-
-		// contours
-		ofxLabel contoursLabel;
-		ofxToggle showContours;
-
-		// sequence mode
-		ofxLabel sequenceLabel;
-		bool sequenceMode;
-
+        // timeline
         ofxTimeline timeline;
     
-        ofCamera starsCam; // add mouse controls for camera movement
-        ofMesh starsMesh;
+        // camera for our stars
+        ofCamera starsCam;
+    
+    private:
 };

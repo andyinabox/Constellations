@@ -53,7 +53,7 @@ void main()
 
     vec4 outColor = mix(xBlur, yBlur, 0.5);
     
-    outColor.a = alpha;
+    outColor.a *= alpha;
     
     
     gl_FragColor = outColor;

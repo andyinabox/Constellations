@@ -3,20 +3,12 @@
 //--------------------------------------------------------------
 void Vespers::setup(){
     
-//    cout << glGetString(GL_EXTENSIONS);
-    
+    // basic oF / GL setup
 	ofSetFrameRate(60);
 	ofSetVerticalSync(true);
     ofEnableSmoothing();
 
-
-	// window dimensions for config mode
-	configWindowWidth = 1160;
-	configWindowHeight = 480;
-	// window dimensions for sequence mode
-	sequenceWindowWidth = 640;
-	sequenceWindowHeight = 480;
-	// camera source dimensions
+    // camera source dimensions
 	camWidth = 640;
 	camHeight = 480;
 	// processing image dimensions
@@ -24,73 +16,66 @@ void Vespers::setup(){
 	procHeight = 240;
 	// config mode gui dimensions
 	guiWidth = 200;
+	// window dimensions for config mode
+	configWindowWidth = 1160;
+	configWindowHeight = 480;
+	// window dimensions for sequence mode
+	sequenceWindowWidth = camWidth;
+	sequenceWindowHeight = camHeight;
+    
 
-	// toggle fullscreen mode
+	// toggles
 	isFullScreen = false;
     sequenceMode = false;
+    drawGui = false;
     
 	// just targeting opengl for now
 	camShader.load("shadersGL2/camShader");
 	starShader.load("shadersGL2/starShader");
 	afterImageShader.load("shadersGL2/afterImageShader");
 
-	// set our framerate and initialize video grabber
+	// camera setup
 	cam.setDesiredFrameRate(30);
 	cam.initGrabber(camWidth,camHeight);
 
-	// by default, set the north star to be in the center
-	// since we're doubling canvas width/height in the
-	// final version, this should put the star in the center
-	northStar = ofPoint(camWidth/2, camHeight/2);
-
+    //
 	mainFbo.allocate(camWidth, camHeight);
 	starsFbo.allocate(camWidth, camHeight);
-    afterImageFbo.allocate(camWidth, camHeight);
 	starsCam.setScale(1,-1,1);
 
-    drawGui = false;
-	// setup gui
+    // GUI SETUP
+    
 	gui.setup();
 	gui.add(prepLabel.setup("// IMAGE PREP", ""));
 
 	// image prep
 	gui.add(useBilateralFilter.setup("Smoothing", true));
-	// gui.add(bfDiameter.setup("Diameter", 10, 0, 20));
-	bfDiameter = 10;
-	// gui.add(bfSigmaColor.setup("Sigma Color", 140.0, 0.0, 300.0));
-	bfSigmaColor = 140.0;
-	// gui.add(bfSigmaSpace.setup("Sigma Space", 140.0, 0.0, 300.0));
-	bfSigmaSpace = 140.0;
-	// gui.add(useNormalize.setup("Normalize", true));
-	useNormalize = true;
-	// gui.add(useManualThreshold.setup("Manual threshold", true));
 	gui.add(thresh.setup("Thresh level", 100.0, 0.0, 255.0));
-	// gui.add(useAutoThreshold.setup("Auto threshold", false));
-	// gui.add(useDilate.setup("Dilate", true));
 	gui.add(dilateIterations.setup("Dilate iterations", 1, 0, 10));
-	// gui.add(useErode.setup("Erode", true));
 	gui.add(erodeIterations.setup("Erode iterations", 1, 0, 10));
 	gui.add(dilateErodeInvert.setup("Invert order", false));
 
 	// stars
 	gui.add(starsLabel.setup("// STARS", ""));
     gui.add(alwaysUpdateStars.setup("Always update stars?", false));
-	gui.add(maxStarRadius.setup("Max star radius", 1.5, 0.0, 10.0));
-	gui.add(minStarRadius.setup("Min star radius", 0.5, 0.0, 10.0));
+	gui.add(maxStarRadius.setup("Max star radius", 1.75, 0.0, 10.0));
+	gui.add(minStarRadius.setup("Min star radius", 0.75, 0.0, 10.0));
 	gui.add(maxStars.setup("Max star count", 40, 1, 100));
 	gui.add(qualityLevel.setup("Star quality level", 0.01, 0.01 , 1.0));
 	gui.add(minDistance.setup("Star min distance", 10.0, 0.0, 100.0));
+    gui.add(maxRandomStars.setup("Max Random Stars", 100, 0, 500 ));
+    gui.add(orbitStars.setup("Orbit stars?", true));
 	gui.add(blockSize.setup("Star block size", 3, 0, 10));
-    gui.add(starsCamPan.setup("Stars Cam Pan", 0.f, -360.f, 360.f ));
-    gui.add(starsCamZoom.setup("Stars Cam Zoom", 280.f, 0.f, 1000.f ));
-    gui.add(maxRandomStars.setup("Max Random Stars", 50, 0, 500 ));
+    gui.add(starsCamPan.setup("Stars Cam Pan", 0.f, 0.f, 360.f ));
+    gui.add(starsCamZoom.setup("Stars Cam Zoom", 415.f, 0.f, 1000.f ));
 
+    // TIMELINE SETUP
     
 	timeline.setup();
 	timeline.setFrameRate(30);
 	timeline.setDurationInFrames(570);
+    
 	timeline.setLoopType(OF_LOOP_NORMAL);
-
 	timeline.addCurves("Vignette Radius", ofRange(0, 1));
 	timeline.addCurves("Stars Alpha", ofRange(0, 1));
 	timeline.addCurves("Random Stars", ofRange(0, 1));
@@ -103,20 +88,32 @@ void Vespers::setup(){
     timeline.addCurves("AfterImage Threshold", ofRange(0,3));
 
     ofAddListener(timeline.events().bangFired, this, &Vespers::receivedBang);
+    
+    // play by default
     timeline.play();
     
+    // set number of random stars
     randomStars.resize(maxRandomStars);
 
+    // by default, set the north star to be in the center
+	// since we're doubling canvas width/height in the
+	// final version, this should put the star in the center
+	northStar = ofPoint(camWidth/2, camHeight/2);
+
+    
 }
 
 //--------------------------------------------------------------
 void Vespers::update(){
 
 	cam.update();
+    
     if(alwaysUpdateStars) {
         Vespers::findStars();
         afterImage.setFromPixels(cam.getPixelsRef());
     }
+    
+    // @todo: should this wrap the whole thing?
 	if(cam.isFrameNew()) {
 		// update all images
 		base.update();
@@ -131,10 +128,12 @@ void Vespers::update(){
 		ofSetWindowShape(configWindowWidth, configWindowHeight);
 	}
     
-    if(timeline.getValue("Stars Alpha") > 0) {
+    if(timeline.getValue("Stars Alpha") > 0 || (bool) alwaysUpdateStars) {
+        
+        float alpha = (bool) alwaysUpdateStars ? 1.0 : timeline.getValue("Stars Alpha");
         
         starShader.begin();
-        starShader.setUniform1f("alpha", timeline.getValue("Stars Alpha"));
+        starShader.setUniform1f("alpha", alpha);
         starShader.setUniform1f("time", ofGetElapsedTimef());
         starShader.end();
         
@@ -195,27 +194,25 @@ void Vespers::draw(){
         mainFbo.draw(0, 0);
     }
 
-    // draw stars
-    if(timeline.getValue("Stars Alpha") > 0) {
-        // seemed to fix the star flickering problem when
-        // i set up the shader here rather than in the fbo
-        starShader.begin();
+    // use additive blend mode
+    ofEnableBlendMode(OF_BLENDMODE_ADD);
 
-            starShader.setUniform1f("alpha", timeline.getValue("Stars Alpha"));
-            starShader.setUniform1f("time", ofGetElapsedTimef());
-            starsFbo.draw(0, 0);
-
-        starShader.end();
-    }
-
-    // draw afterimage
-    if (timeline.getValue("AfterImage Alpha") > 0) {
-        ofEnableBlendMode(OF_BLENDMODE_ADD);
-        afterImageShader.begin();
-        afterImage.draw(0, 0);
-        afterImageShader.end();
-        ofDisableBlendMode();
-    }
+        // draw afterimage
+        if (timeline.getValue("AfterImage Alpha") > 0) {
+            afterImageShader.begin();
+                afterImage.draw(0, 0);
+            afterImageShader.end();
+        }
+        
+        // draw stars
+        if(timeline.getValue("Stars Alpha") > 0 || (bool) alwaysUpdateStars) {
+            // seemed to fix the star flickering problem when
+            // i set up the shader here rather than in the fbo
+            starShader.begin();
+                starsFbo.draw(0, 0);
+            starShader.end();
+        }
+    ofDisableBlendMode();
 
     
     if(!sequenceMode) {
@@ -253,13 +250,20 @@ void Vespers::drawHud(int x, int y) {
     // display frames per second
     hud += ofToString(ofGetFrameRate(), 2) + " fps";
     // display elapsed time
-    hud += " / " + ofToString(t, 1) + "sec";
+    hud += " / " + ofToString(timeline.getCurrentTime(), 1) + "/" + ofToString(timeline.getDurationInSeconds()) +" sec";
     // draw hud
     ofDrawBitmapStringHighlight(hud, x, y);
 }
 
 
 void Vespers::findStars() {
+
+    // some default CV values
+	float bfDiameter = 10;
+	float bfSigmaColor = 140.0;
+	float bfSigmaSpace = 140.0;
+	float useNormalize = true;
+    
     
     // add extra stars
     randomStars.resize(maxRandomStars);
@@ -290,7 +294,7 @@ void Vespers::findStars() {
 		, dilateErodeInvert
 	);
 
-
+    // get our stars
 	stars = VespersCv::findPoints(
 		gray,
 		maxStars,
@@ -300,6 +304,8 @@ void Vespers::findStars() {
 		camWidth,
 		camHeight
 	);
+    
+    // add the "north star" to the top of the stack
 	stars.push_back(northStar);
     
 }
@@ -312,52 +318,74 @@ void Vespers::drawStars(
     
 
     float starRadius;
-    float starDistance;
+    float alpha = (bool) alwaysUpdateStars ? 1.0 : timeline.getValue("Stars Alpha");
 
-	//move the camera around the mesh
+    // CAMERA SETUP
+    
+	// set the initial camera direction
 	ofVec3f camDirection(0,0,1);
-	ofVec3f center(cam.getWidth()/2.f,cam.getHeight()/2.f, 255/2.f);
+    // find the center of the plane
+	ofVec3f center(cam.getWidth()/2.f,cam.getHeight()/2.f, 0);
+    // rotate the camera based on the `starsCamPan` GUI value
 	ofVec3f camDirectionRotated = camDirection.getRotated(starsCamPan, ofVec3f(1,0,0));
+    // set the camera position vector
 	ofVec3f camPosition = center + camDirectionRotated * starsCamZoom;
-	
+    // set the camera position
 	starsCam.setPosition(camPosition);
+    // point the camea at the center of th plane
 	starsCam.lookAt(center);
-    // rotate camera
-    starsCam.rotate(timeline.getValue("Stars Rotation"), (camPosition - northStar));
+    // rotate camera around the "North Star" based on the timeline value
+//    starsCam.rotate(timeline.getValue("Stars Rotation"), (camPosition - northStar));
 
     starsFbo.begin();
-        ofClear(0,0,0,0);
-            starShader.setUniform3f("color",
-                ofMap(color.r, 0, 255, 0, 1)
-                , ofMap(color.g, 0,  255, 0, 1)
-                , ofMap(color.b, 0,  255, 0, 1)
-            );
+    ofClear(0,0,0,0);
     
-            float alpha = timeline.getValue("Stars Alpha");
-
-            starShader.setUniform1f("alpha", alpha);
-            starShader.setUniform1f("time", ofGetElapsedTimef());
+    // stars camera
+    starsCam.begin();
     
-            starsCam.begin();
-            ofEnableDepthTest();
-            // draw our actual stars
+    // set colors
+    ofSetColor(color);
+    ofFill();
+    
+    // arrange by depth rather than order added
+    ofEnableDepthTest();
+    
+    ofPushMatrix();
+    
+        if(orbitStars) {
+            ofTranslate(northStar);
+            ofRotateZ(timeline.getValue("Stars Rotation"));
+        }
+        ofPushMatrix();
+            if(orbitStars) {
+                ofTranslate(-northStar);
+            }
+    
+            // draw our actual stars if there are any
             if(stars.size() > 0) {
+                
+                // here we are basing the number of stars on the alpha value,
+                // so the higher the alpha the more stars will be drawn
+                // @todo: reverse the ordering on this so it goes largest to smallest
                 for(int i = 0; i< ceil(stars.size()*alpha); i++) {
-                    // calculate radius based on star "quality" (order) and
-                    // star radius max/min
+                    // calculate radius based on star "quality" (order) and star radius max/min
                     starRadius = (((maxRadius-minRadius)/stars.size())*i)+minRadius;
+                    // draw the star
                     ofDrawSphere(stars[i], starRadius);
                 }
             }
-    
-            // draw random stars
-            for(int j=0; j < randomStars.size()*timeline.getValue("Random Stars"); j++) {
+
+            // draw randomly generated stars
+            for(int j=0; j < randomStars.size()*alpha; j++) {
                 ofDrawSphere(randomStars[j], minRadius);
             }
+        ofPopMatrix();
     
-            ofDisableDepthTest();
-            starsCam.end();
-
+    ofPopMatrix();
+    
+    // make a graceful exit
+    ofDisableDepthTest();
+    starsCam.end();
     starsFbo.end();
 }
 
