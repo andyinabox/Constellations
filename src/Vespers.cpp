@@ -7,6 +7,7 @@ void Vespers::setup(){
 	ofSetFrameRate(60);
 	ofSetVerticalSync(true);
     ofEnableSmoothing();
+    ofSetLogLevel(OF_LOG_VERBOSE);
 
     // camera source dimensions
 	camWidth = 640;
@@ -38,15 +39,17 @@ void Vespers::setup(){
 	cam.setDesiredFrameRate(30);
 	cam.initGrabber(camWidth,camHeight);
 
-    //
+    // set up frame buffers
 	mainFbo.allocate(camWidth, camHeight);
 	starsFbo.allocate(camWidth, camHeight);
+    
+    // set up camera for stars view
 	starsCam.setScale(1,-1,1);
 
     // GUI SETUP
     
 	gui.setup();
-	gui.add(prepLabel.setup("// IMAGE PREP", ""));
+	gui.add(prepLabel.setup("IMAGE PREP", ""));
 
 	// image prep
 	gui.add(useBilateralFilter.setup("Smoothing", true));
@@ -56,15 +59,15 @@ void Vespers::setup(){
 	gui.add(dilateErodeInvert.setup("Invert order", false));
 
 	// stars
-	gui.add(starsLabel.setup("// STARS", ""));
-    gui.add(alwaysUpdateStars.setup("Always update stars?", false));
+	gui.add(starsLabel.setup("STARS", ""));
+    gui.add(alwaysUpdateStars.setup("Always update stars", false));
 	gui.add(maxStarRadius.setup("Max star radius", 1.75, 0.0, 10.0));
 	gui.add(minStarRadius.setup("Min star radius", 0.75, 0.0, 10.0));
 	gui.add(maxStars.setup("Max star count", 40, 1, 100));
 	gui.add(qualityLevel.setup("Star quality level", 0.01, 0.01 , 1.0));
 	gui.add(minDistance.setup("Star min distance", 10.0, 0.0, 100.0));
     gui.add(maxRandomStars.setup("Max Random Stars", 100, 0, 500 ));
-    gui.add(orbitStars.setup("Orbit stars?", true));
+    gui.add(orbitStars.setup("Orbit stars", true));
 	gui.add(blockSize.setup("Star block size", 3, 0, 10));
     gui.add(starsCamPan.setup("Stars Cam Pan", 0.f, 0.f, 360.f ));
     gui.add(starsCamZoom.setup("Stars Cam Zoom", 415.f, 0.f, 1000.f ));
@@ -392,13 +395,17 @@ void Vespers::drawStars(
 
 //--------------------------------------------------------------
 void Vespers::keyPressed(int key){
-
+    bool showTimeline;
 	switch(key) {
-		case 's': sequenceMode = !sequenceMode; break;
+		case 'd': sequenceMode = !sequenceMode; break;
         case 't' :
-            drawGui = !timeline.toggleShow();
+            showTimeline = timeline.toggleShow();
+            drawGui = !showTimeline;
+            if(!showTimeline) { ofGetWindowPtr()->showCursor(); }
             break;
 		case 'f': isFullScreen = !isFullScreen; ofToggleFullscreen(); break;
+        case 's': gui.saveToFile("settings.xml"); ofLogVerbose() << "Saved config"; break;
+        case 'l': gui.loadFromFile("settings.xml"); ofLogVerbose() << "Loaded config"; break;
 	}
 }
 

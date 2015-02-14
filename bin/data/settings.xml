@@ -1,27 +1,21 @@
 <group>
-	<___IMAGE_PREP/>
-	<Bilateral_filter__blur_>1</Bilateral_filter__blur_>
-	<Diameter>10</Diameter>
-	<Sigma_Color>140</Sigma_Color>
-	<Sigma_Space>140</Sigma_Space>
-	<Normalize>1</Normalize>
-	<Manual_threshold>1</Manual_threshold>
-	<Thresh_top>71.4</Thresh_top>
-	<Auto_threshold>0</Auto_threshold>
-	<Dilate>1</Dilate>
-	<Dilate_iterations>2</Dilate_iterations>
-	<Erode>1</Erode>
-	<Erode_iterations>3</Erode_iterations>
-	<Invert_order>1</Invert_order>
-	<___STARS/>
-	<Show_stars>1</Show_stars>
-	<Star_radius>1</Star_radius>
-	<Max_stars>44</Max_stars>
-	<Star_quality_level>0.005</Star_quality_level>
-	<Star_min_distance>23</Star_min_distance>
-	<Star_block_size>2.15</Star_block_size>
-	<___CONNECT_THE_DOTS/>
-	<Show_constellations>0</Show_constellations>
-	<___CONTOURS/>
-	<Show_contours>0</Show_contours>
+	<IMAGE_PREP/>
+	<Smoothing>1</Smoothing>
+	<Thresh_level>100</Thresh_level>
+	<Dilate_iterations>1</Dilate_iterations>
+	<Erode_iterations>1</Erode_iterations>
+	<Invert_order>0</Invert_order>
+	<STARS/>
+	<Always_update_stars>0</Always_update_stars>
+	<Max_star_radius>1.75</Max_star_radius>
+	<Min_star_radius>0.75</Min_star_radius>
+	<Max_star_count>40</Max_star_count>
+	<Star_quality_level>0.01</Star_quality_level>
+	<Star_min_distance>10</Star_min_distance>
+	<Max_Random_Stars>100</Max_Random_Stars>
+	<Orbit_stars>1</Orbit_stars>
+	<Star_block_size>3</Star_block_size>
+	<Stars_Cam_Pan>0</Stars_Cam_Pan>
+	<Stars_Cam_Zoom>415</Stars_Cam_Zoom>
+<group/>
 </group>
