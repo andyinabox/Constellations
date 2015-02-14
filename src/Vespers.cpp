@@ -160,10 +160,10 @@ void Vespers::update(){
         
         ofColor camColor = timeline.getColor("Video Color");
         camShader.setUniform3f("inputColor",
-                               ofMap(camColor.r, 0, 255, 0, 1),
-                               ofMap(camColor.g, 0, 255, 0, 1),
-                               ofMap(camColor.b, 0, 255, 0, 1)
-                               );
+           ofMap(camColor.r, 0, 255, 0, 1),
+           ofMap(camColor.g, 0, 255, 0, 1),
+           ofMap(camColor.b, 0, 255, 0, 1)
+        );
         camShader.setUniform1f("colorMix", timeline.getValue("Color Mix"));
         camShader.setUniform1f("time", ofMap(mouseY, 0, ofGetHeight(), 0, 1));
         // draw our image plane
@@ -190,6 +190,7 @@ void Vespers::update(){
 void Vespers::draw(){
     ofClear(0,0,0);
 
+    // this is the viewing area
     canvas = ofRectangle(0, 0, sequenceWindowWidth, sequenceWindowHeight);
 
     // draw the main image FBO
