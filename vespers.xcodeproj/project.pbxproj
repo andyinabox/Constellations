@@ -399,6 +399,9 @@
 		C1E9A7811A8BFD1A00830987 /* camShader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = camShader.vert; sourceTree = "<group>"; };
 		C1E9A7821A8BFD1A00830987 /* starShader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = starShader.frag; sourceTree = "<group>"; };
 		C1E9A7831A8BFD1A00830987 /* starShader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = starShader.vert; sourceTree = "<group>"; };
+		C1EBDB951A8FBB15008E8987 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		C1EBDB961A8FBB15008E8987 /* RELEASE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = RELEASE.md; sourceTree = "<group>"; };
+		C1EBDB971A8FBB15008E8987 /* VERSION */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VERSION; sourceTree = "<group>"; };
 		C4FB85020773DA0F09B8B6CE /* ts_gtest.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ts_gtest.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/ts/ts_gtest.h; sourceTree = SOURCE_ROOT; };
 		C6151136D101F857DAE12722 /* ofxCvImage.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxCvImage.cpp; path = ../../../addons/ofxOpenCv/src/ofxCvImage.cpp; sourceTree = SOURCE_ROOT; };
 		C61D3DACE506E4A1C3A6D782 /* highgui.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = highgui.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/highgui/highgui.hpp; sourceTree = SOURCE_ROOT; };
@@ -1455,6 +1458,9 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
+				C1EBDB951A8FBB15008E8987 /* README.md */,
+				C1EBDB961A8FBB15008E8987 /* RELEASE.md */,
+				C1EBDB971A8FBB15008E8987 /* VERSION */,
 				C1A1F7181A7D952F00CEB8FC /* data */,
 				C1A1F44A1A7D58CC00CEB8FC /* OpenAL.framework */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,

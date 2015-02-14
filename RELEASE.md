@@ -4,6 +4,12 @@ Vespers
 Release Notes
 --------------
 
+### 0.6.1
+ - Fixed star alignment during rotation
+ - Fixed disappearing mouse when hiding timeline
+ - Added ofxGui settings saving
+ - Timing adjustments
+
 ### 0.6.0
  - Fixed star flickering issue
  - Added star rotation
